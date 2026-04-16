@@ -83,7 +83,7 @@ namespace Linac_QA_Software.ViewModels
         private void Save()
         {
             string physicists = SelectedPhysicists.Any() ? string.Join(", ", SelectedPhysicists) : "None selected";
-            MessageBox.Show($"Saved (stub)\nLinac: {Linac}\nDate: {Date:d}\nPhysicists: {physicists}\nLeakage Rate");
+            MessageBox.Show($"Saved (stub)\nLinac: {Linac}\nDate: {Date:d}\nPhysicists: {physicists}");
         }
 
         private void Submit()
