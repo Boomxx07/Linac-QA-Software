@@ -20,7 +20,7 @@ using OxyPlot.Axes;
 
 namespace Linac_QA_Software.ViewModels
 {
-    public class EnergyConfigViewModel : ObservableObject
+    public class EnergyConfigViewModel : ValidatedObservableObject
     {
         // -------------------------------------------------------------------------
         // Identity
@@ -36,30 +36,61 @@ namespace Linac_QA_Software.ViewModels
         public ObservableCollection<LinearityRowViewModel> Rows { get; }
 
         // -------------------------------------------------------------------------
-        // Leakage measurement inputs
+        // Leakage measurement inputs (stored as strings to preserve user input format)
         // -------------------------------------------------------------------------
 
-        private float? _leakageTime1, _leakageReading1, _leakageTime2, _leakageReading2;
+        private string _leakageTime1 = "", _leakageReading1 = "", _leakageTime2 = "", _leakageReading2 = "";
 
-        public float? LeakageTime1
+        public string LeakageTime1
         {
             get => _leakageTime1;
-            set { if (SetProperty(ref _leakageTime1, value)) RefreshLeakageRate(); }
+            set
+            {
+                if (SetProperty(ref _leakageTime1, value))
+                {
+                    ValidateNumeric(value, nameof(LeakageTime1));
+                    RefreshLeakageRate();
+                }
+            }
         }
-        public float? LeakageReading1
-{
+
+        public string LeakageReading1
+        {
             get => _leakageReading1;
-            set { if (SetProperty(ref _leakageReading1, value)) RefreshLeakageRate(); }
+            set
+            {
+                if (SetProperty(ref _leakageReading1, value))
+                {
+                    ValidateNumeric(value, nameof(LeakageReading1));
+                    RefreshLeakageRate();
+                }
+            }
         }
-        public float? LeakageTime2
+
+        public string LeakageTime2
         {
             get => _leakageTime2;
-            set { if (SetProperty(ref _leakageTime2, value)) RefreshLeakageRate(); }
+            set
+            {
+                if (SetProperty(ref _leakageTime2, value))
+                {
+                    ValidateNumeric(value, nameof(LeakageTime2));
+                    RefreshLeakageRate();
+                }
+            }
         }
-        public float? LeakageReading2
+
+        public string LeakageReading2
         {
             get => _leakageReading2;
-            set { if (SetProperty(ref _leakageReading2, value)) RefreshLeakageRate(); }
+            set
+            {
+                if (SetProperty(ref _leakageReading2, value))
+                {
+                    ValidateNumeric(value, nameof(LeakageReading2));
+                    RefreshLeakageRate();
+                }
+            }
         }
 
         private float? _calculatedLeakageRate;
@@ -138,14 +169,30 @@ namespace Linac_QA_Software.ViewModels
         // -------------------------------------------------------------------------
 
         /// <summary>
+        /// Safely converts a string to float?, returning null if empty or invalid.
+        /// </summary>
+        private static float? ParseNumeric(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            return float.TryParse(value, out float result) ? result : null;
+        }
+
+        /// <summary>
         /// Recalculates the leakage rate from the two background measurements
         /// and propagates the result to all rows.
         /// </summary>
         private void RefreshLeakageRate()
         {
+            var time1 = ParseNumeric(LeakageTime1);
+            var reading1 = ParseNumeric(LeakageReading1);
+            var time2 = ParseNumeric(LeakageTime2);
+            var reading2 = ParseNumeric(LeakageReading2);
+
             CalculatedLeakageRate = PhysicsCalculator.CalculateLeakageRate(
-                LeakageReading1, LeakageTime1,
-                LeakageReading2, LeakageTime2);
+                reading1, time1,
+                reading2, time2);
         }
 
         /// <summary>

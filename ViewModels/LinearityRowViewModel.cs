@@ -11,7 +11,7 @@ using Linac_QA_Software.Models;
 
 namespace Linac_QA_Software.ViewModels
 {
-    public class LinearityRowViewModel : ObservableObject
+    public class LinearityRowViewModel : ValidatedObservableObject
     {
         // -------------------------------------------------------------------------
         // Event — raised whenever any calculated value changes so that the parent
@@ -27,14 +27,49 @@ namespace Linac_QA_Software.ViewModels
         public int MU { get; }
 
         // -------------------------------------------------------------------------
-        // User-entered readings (nC)
+        // User-entered readings (stored as strings to preserve input format, including trailing zeros)
         // -------------------------------------------------------------------------
 
-        private float? _reading1, _reading2, _reading3;
+        private string _reading1 = "", _reading2 = "", _reading3 = "";
 
-        public float? Reading1 { get => _reading1; set { if (SetProperty(ref _reading1, value)) Recalculate(); } }
-        public float? Reading2 { get => _reading2; set { if (SetProperty(ref _reading2, value)) Recalculate(); } }
-        public float? Reading3 { get => _reading3; set { if (SetProperty(ref _reading3, value)) Recalculate(); } }
+        public string Reading1
+        {
+            get => _reading1;
+            set
+            {
+                if (SetProperty(ref _reading1, value))
+                {
+                    ValidateNumeric(value, nameof(Reading1));
+                    Recalculate();
+                }
+            }
+        }
+
+        public string Reading2
+        {
+            get => _reading2;
+            set
+            {
+                if (SetProperty(ref _reading2, value))
+                {
+                    ValidateNumeric(value, nameof(Reading2));
+                    Recalculate();
+                }
+            }
+        }
+
+        public string Reading3
+        {
+            get => _reading3;
+            set
+            {
+                if (SetProperty(ref _reading3, value))
+                {
+                    ValidateNumeric(value, nameof(Reading3));
+                    Recalculate();
+                }
+            }
+        }
 
         // -------------------------------------------------------------------------
         // Calculated outputs (all read-only from the UI's perspective)
@@ -120,9 +155,25 @@ namespace Linac_QA_Software.ViewModels
         // Private recalculation logic
         // -------------------------------------------------------------------------
 
+        /// <summary>
+        /// Safely converts a string to float?, returning null if empty or invalid.
+        /// </summary>
+        private static float? ParseNumeric(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            return float.TryParse(value, out float result) ? result : null;
+        }
+
         private void Recalculate()
         {
-            var presentReadings = new[] { Reading1, Reading2, Reading3 }
+            // Parse string readings to nullable floats
+            var reading1 = ParseNumeric(Reading1);
+            var reading2 = ParseNumeric(Reading2);
+            var reading3 = ParseNumeric(Reading3);
+
+            var presentReadings = new[] { reading1, reading2, reading3 }
                 .Where(r => r.HasValue)
                 .Select(r => r!.Value)
                 .ToList();
