@@ -39,14 +39,14 @@ namespace Linac_QA_Software.ViewModels
         // Leakage measurement inputs
         // -------------------------------------------------------------------------
 
-        private string? _leakageTime1, _leakageReading1, _leakageTime2, _leakageReading2;
+        private float? _leakageTime1, _leakageReading1, _leakageTime2, _leakageReading2;
 
-        public string? LeakageTime1
+        public float? LeakageTime1
         {
             get => _leakageTime1;
             set { if (SetProperty(ref _leakageTime1, value)) RefreshLeakageRate(); }
         }
-        public double? LeakageReading1
+        public float? LeakageReading1
 {
             get => _leakageReading1;
             set { if (SetProperty(ref _leakageReading1, value)) RefreshLeakageRate(); }
