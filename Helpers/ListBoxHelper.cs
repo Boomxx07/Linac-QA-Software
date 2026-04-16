@@ -1,58 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Purpose: Attached property that bridges a WPF ListBox's SelectedItems
+// collection to a ViewModel property.
+//
+// Background: WPF's built-in ListBox.SelectedItems is not a DependencyProperty,
+// so it cannot be used with standard {Binding}.  This helper works around that
+// by attaching a custom property and syncing it on SelectionChanged.
+//
+// Usage in XAML:
+//   <ListBox helpers:ListBoxHelper.SelectedItems="{Binding SelectedPhysicists}" ... />
+
+using System.Collections;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Linac_QA_Software.Helpers
 {
-    using System.Collections;
-    using System.Windows;
-    using System.Windows.Controls;
-
-    namespace LinacQA
+    public static class ListBoxHelper
     {
-        public static class ListBoxHelper
+        // Registers the attached dependency property with WPF's property system.
+        public static readonly DependencyProperty SelectedItemsProperty =
+            DependencyProperty.RegisterAttached(
+                "SelectedItems",
+                typeof(IList),
+                typeof(ListBoxHelper),
+                new PropertyMetadata(null, OnSelectedItemsChanged));
+
+        public static void SetSelectedItems(DependencyObject element, IList value)
+            => element.SetValue(SelectedItemsProperty, value);
+
+        public static IList GetSelectedItems(DependencyObject element)
+            => (IList)element.GetValue(SelectedItemsProperty);
+
+        /// <summary>
+        /// Called once when the attached property is first set on a ListBox.
+        /// Hooks the SelectionChanged event so we can keep the bound list in sync.
+        /// </summary>
+        private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            public static readonly DependencyProperty SelectedItemsProperty =
-                DependencyProperty.RegisterAttached(
-                    "SelectedItems",
-                    typeof(IList),
-                    typeof(ListBoxHelper),
-                    new PropertyMetadata(null, OnSelectedItemsChanged));
+            if (d is not ListBox listBox) return;
 
-            public static void SetSelectedItems(DependencyObject element, IList value)
-            {
-                element.SetValue(SelectedItemsProperty, value);
-            }
+            // Unsubscribe before subscribing to prevent duplicate handlers
+            // if the property is ever re-assigned at runtime.
+            listBox.SelectionChanged -= ListBox_SelectionChanged;
+            listBox.SelectionChanged += ListBox_SelectionChanged;
+        }
 
-            public static IList GetSelectedItems(DependencyObject element)
-            {
-                return (IList)element.GetValue(SelectedItemsProperty);
-            }
+        /// <summary>
+        /// Mirrors the ListBox's current selection into the bound ViewModel collection.
+        /// </summary>
+        private static void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ListBox listBox) return;
 
-            private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            {
-                if (d is ListBox listBox)
-                {
-                    listBox.SelectionChanged -= ListBox_SelectionChanged;
-                    listBox.SelectionChanged += ListBox_SelectionChanged;
-                }
-            }
+            var boundList = GetSelectedItems(listBox);
+            if (boundList == null) return;
 
-            private static void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            {
-                if (sender is ListBox listBox)
-                {
-                    var boundList = GetSelectedItems(listBox);
-                    if (boundList == null) return;
-
-                    boundList.Clear();
-
-                    foreach (var item in listBox.SelectedItems)
-                    {
-                        boundList.Add(item);
-                    }
-                }
-            }
+            // Rebuild the bound list from scratch on every change.
+            boundList.Clear();
+            foreach (var item in listBox.SelectedItems)
+                boundList.Add(item);
         }
     }
 }

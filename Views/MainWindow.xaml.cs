@@ -1,26 +1,20 @@
-﻿using Linac_QA_Software.ViewModels;
-using System.Text;
+﻿// Purpose: Code-behind for the application's main window.
+//
+// In MVVM, code-behind files should be kept as thin as possible.
+// The only responsibility here is to instantiate MainViewModel and set
+// it as the DataContext so that all XAML bindings resolve correctly.
+
+using Linac_QA_Software.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Linac_QA_Software
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel(); // Set the data context
+            DataContext = new MainViewModel();
         }
     }
 }

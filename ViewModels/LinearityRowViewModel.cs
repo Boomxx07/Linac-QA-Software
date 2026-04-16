@@ -1,0 +1,148 @@
+﻿// Purpose: ViewModel for a single row in the linearity data table.
+//
+// Each row represents one MU setting (e.g. 5 MU, 10 MU, 200 MU).
+// The user enters up to three electrometer readings; this class computes
+// the average, leakage-corrected value, reading-per-MU, and pass/fail status.
+
+using System;
+using System.Linq;
+using Linac_QA_Software.Helpers;
+using Linac_QA_Software.Models;
+
+namespace Linac_QA_Software.ViewModels
+{
+    public class LinearityRowViewModel : ObservableObject
+    {
+        // -------------------------------------------------------------------------
+        // Event — raised whenever any calculated value changes so that the parent
+        // EnergyConfigViewModel knows to refresh the chart and regression.
+        // -------------------------------------------------------------------------
+        public event EventHandler RowUpdated;
+
+        // -------------------------------------------------------------------------
+        // Identity
+        // -------------------------------------------------------------------------
+
+        /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
+        public int MU { get; }
+
+        // -------------------------------------------------------------------------
+        // User-entered readings (nC)
+        // -------------------------------------------------------------------------
+
+        private double? _reading1, _reading2, _reading3;
+
+        public double? Reading1 { get => _reading1; set { if (SetProperty(ref _reading1, value)) Recalculate(); } }
+        public double? Reading2 { get => _reading2; set { if (SetProperty(ref _reading2, value)) Recalculate(); } }
+        public double? Reading3 { get => _reading3; set { if (SetProperty(ref _reading3, value)) Recalculate(); } }
+
+        // -------------------------------------------------------------------------
+        // Calculated outputs (all read-only from the UI's perspective)
+        // -------------------------------------------------------------------------
+
+        private double? _average, _leakageCorrected, _readingPerMu, _percentDiff;
+
+        /// <summary>Mean of whichever readings have been entered.</summary>
+        public double? Average { get => _average; private set => SetProperty(ref _average, value); }
+
+        /// <summary>Average reading minus the expected leakage during the delivery time.</summary>
+        public double? LeakageCorrected { get => _leakageCorrected; private set => SetProperty(ref _leakageCorrected, value); }
+
+        /// <summary>LeakageCorrected divided by MU — the normalised output used for linearity comparison.</summary>
+        public double? ReadingPerMU { get => _readingPerMu; private set => SetProperty(ref _readingPerMu, value); }
+
+        /// <summary>
+        /// Percent difference of ReadingPerMU relative to the 200 MU reference row.
+        /// Positive = higher output than reference; negative = lower.
+        /// </summary>
+        public double? PercentDiff
+        {
+            get => _percentDiff;
+            private set
+            {
+                if (SetProperty(ref _percentDiff, value))
+                    OnPropertyChanged(nameof(StatusText)); // StatusText depends on PercentDiff
+            }
+        }
+
+        /// <summary>
+        /// Pass/fail string derived from PercentDiff.
+        /// Empty when no data is available; "OK" within ±2 %; "FAIL" otherwise.
+        /// </summary>
+        public string StatusText => PercentDiff.HasValue
+            ? (Math.Abs(PercentDiff.Value) <= PhysicsCalculator.PercentDiffTolerance ? "OK" : "FAIL")
+            : "";
+
+        // -------------------------------------------------------------------------
+        // Internal state
+        // -------------------------------------------------------------------------
+
+        /// <summary>
+        /// The leakage rate in nC/s, supplied by the parent EnergyConfigViewModel.
+        /// Stored separately so that recalculation works even when the user hasn't
+        /// entered all readings yet.
+        /// </summary>
+        private double _leakageRate = 0.0;
+
+        // -------------------------------------------------------------------------
+        // Constructor
+        // -------------------------------------------------------------------------
+
+        public LinearityRowViewModel(int mu) => MU = mu;
+
+        // -------------------------------------------------------------------------
+        // Methods called by the parent ViewModel
+        // -------------------------------------------------------------------------
+
+        /// <summary>
+        /// Called by EnergyConfigViewModel whenever the leakage rate changes.
+        /// Triggers a recalculation so leakage correction stays current.
+        /// </summary>
+        public void UpdateLeakageRate(double leakageRateNcPerSec)
+        {
+            _leakageRate = leakageRateNcPerSec;
+            Recalculate();
+        }
+
+        /// <summary>
+        /// Called by EnergyConfigViewModel to set this row's percent difference
+        /// relative to the 200 MU reference row.
+        /// </summary>
+        public void UpdatePercentDiff(double referenceReadingPerMu)
+        {
+            if (ReadingPerMU.HasValue && Math.Abs(referenceReadingPerMu) > 1e-10)
+                PercentDiff = ((ReadingPerMU.Value - referenceReadingPerMu) / referenceReadingPerMu) * 100.0;
+            else
+                PercentDiff = null;
+        }
+
+        // -------------------------------------------------------------------------
+        // Private recalculation logic
+        // -------------------------------------------------------------------------
+
+        private void Recalculate()
+        {
+            var presentReadings = new[] { Reading1, Reading2, Reading3 }
+                .Where(r => r.HasValue)
+                .Select(r => r!.Value)
+                .ToList();
+
+            if (presentReadings.Count > 0)
+            {
+                Average = presentReadings.Average();
+
+                // Estimated beam-on time in seconds based on the assumed dose rate.
+                double deliveryTimeSec = MU / PhysicsCalculator.DoseRateMuPerSec;
+                LeakageCorrected = Average - (_leakageRate * deliveryTimeSec);
+                ReadingPerMU = LeakageCorrected / MU;
+            }
+            else
+            {
+                // No readings yet — reset all derived values.
+                Average = LeakageCorrected = ReadingPerMU = null;
+            }
+
+            RowUpdated?.Invoke(this, EventArgs.Empty);
+        }
+    }
+}

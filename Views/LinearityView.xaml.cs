@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿// Purpose: Code-behind for the Linearity QA user control.
+//
+// This file is intentionally empty beyond the constructor — all logic
+// lives in LinearityViewModel and its children.  The DataContext is
+// inherited from the parent MainWindow via XAML binding.
+
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Linac_QA_Software.Views
 {
-    /// <summary>
-    /// Interaction logic for LinearityView.xaml
-    /// </summary>
     public partial class LinearityView : UserControl
     {
         public LinearityView()

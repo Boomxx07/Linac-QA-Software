@@ -3,56 +3,60 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Linac_QA_Software"
         xmlns:views="clr-namespace:Linac_QA_Software.Views"
-        xmlns:helpers="clr-namespace:Linac_QA_Software.Helpers.LinacQA"
+        xmlns:helpers="clr-namespace:Linac_QA_Software.Helpers"
+        xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
         mc:Ignorable="d"
-        Title="SCGH Linac QA" Height="900" Width="800">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="15" Orientation="Vertical">
-            <!-- Header -->
-            <TextBlock Text="Annual Photons Linac QA" FontSize="26" FontWeight="Bold" Margin="0,0,0,15"/>
+        Title="SCGH Linac QA" Height="900" Width="1000"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}">
 
-            <!-- Top Inputs -->
-            <Grid Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Linac -->
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Linac"/>
-                    <ComboBox ItemsSource="{Binding LinacOptions}"
-                              SelectedItem="{Binding Linac}" />
-                </StackPanel>
-
-                <!-- Date -->
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Date"/>
-                    <DatePicker SelectedDate="{Binding Date}"/>
-                </StackPanel>
-
-                <!-- Physicists -->
-                <StackPanel Grid.Column="2">
-                    <TextBlock Text="Physicists"/>
-                    <ListBox SelectionMode="Multiple"
-                             ItemsSource="{Binding PhysicistList}"
-                             helpers:ListBoxHelper.SelectedItems="{Binding SelectedPhysicists}"
-                             Height="60" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-                </StackPanel>
-            </Grid>
-
-            <TextBlock Text="Linearity START" FontSize="20" FontWeight="Bold"/>
-            <views:LinearityView DataContext="{Binding LinearityVM}" />
-            <TextBlock Text="Linearity END" FontSize="20" FontWeight="Bold"/>
-
-            <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Save" Width="100" Margin="5" Command="{Binding SaveCommand}"/>
-                <Button Content="Submit" Width="100" Margin="5" Command="{Binding SubmitCommand}"/>
-            </StackPanel>
+    <DockPanel Margin="15">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button Content="Save Draft" Width="120" Height="30" Margin="5" Command="{Binding SaveCommand}"/>
+            <Button Content="Final Submit" Width="120" Height="30" Margin="5" Command="{Binding SubmitCommand}" Background="AliceBlue"/>
         </StackPanel>
-    </ScrollViewer>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical" Margin="0,0,15,0">
+
+                <TextBlock Text="Annual Photons Linac QA" FontSize="26" FontWeight="Bold" Margin="0,0,0,15" Foreground="#2C3E50"/>
+
+                <Border Background="#F9F9F9" CornerRadius="5" Padding="15" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="Linac Machine" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ComboBox ItemsSource="{Binding LinacOptions}"
+                                      SelectedItem="{Binding Linac}" 
+                                      Height="25"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="Test Date" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <DatePicker SelectedDate="{Binding Date}" Height="25"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Attending Physicists" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ListBox SelectionMode="Multiple"
+                                     ItemsSource="{Binding PhysicistList}"
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedPhysicists}"
+                                     Height="80" 
+                                     BorderBrush="#CCC"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Separator Margin="0,10"/>
+                <TextBlock Text="1. Linearity Analysis" FontSize="20" FontWeight="Bold" Margin="0,10"/>
+                <views:LinearityView DataContext="{Binding LinearityVM}" />
+
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
 </Window>
