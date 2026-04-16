@@ -3,75 +3,152 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Linac_QA_Software.Views"
+             xmlns:local="clr-namespace:Linac_QA_Software.Views" xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="White">
+             d:DesignHeight="800" d:DesignWidth="800"
+             Background="White"
+             d:DataContext="{d:DesignInstance Type=viewmodels:LinearityViewModel, IsDesignTimeCreatable=True}">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#E0FFFF"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
 
-        <!-- Leakage Section -->
-        <GroupBox Header="Leakage" Grid.Row="0" Margin="0,0,0,10">
-            <Grid Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="200"/>
-                </Grid.ColumnDefinitions>
+        <Style x:Key="CalculatedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#E6E6FA"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+        <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </UserControl.Resources>
 
-                <!-- Headers -->
-                <TextBlock Text="" Grid.Row="0" Grid.Column="0"/>
-                <TextBlock Text="Time (s)" Grid.Row="0" Grid.Column="1"/>
-                <TextBlock Text="Reading (nC)" Grid.Row="0" Grid.Column="2"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding EnergyConfigs}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,30">
 
-                <!-- Start -->
-                <TextBlock Text="Start" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding StartTime}" Grid.Row="1" Grid.Column="1"/>
-                <TextBox Text="{Binding StartReading}" Grid.Row="1" Grid.Column="2"/>
+                        <TextBlock Text="{Binding EnergyName}" FontSize="18" FontWeight="Bold" Margin="5"/>
 
-                <!-- End -->
-                <TextBlock Text="End" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding EndTime}" Grid.Row="2" Grid.Column="1"/>
-                <TextBox Text="{Binding EndReading}" Grid.Row="2" Grid.Column="2"/>
+                        <TextBlock Text="Leakage" Margin="5,0,0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,15">
+                            <Grid Width="200">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                <!-- Result -->
-                <StackPanel Grid.Row="1" Grid.Column="4" Grid.RowSpan="2">
-                    <TextBlock Text="Leakage (nC/s)"/>
-                    <TextBlock Text="{Binding LeakageRate}" FontWeight="Bold"/>
-                </StackPanel>
-            </Grid>
-        </GroupBox>
+                                <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,1">
+                                    <TextBlock Text="Time (s)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock Text="Reading (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                </Border>
 
-        <!-- Measurements Section -->
-        <GroupBox Header="Measurements" Grid.Row="1">
-            <DataGrid ItemsSource="{Binding Measurements}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="MU" Binding="{Binding MU}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Reading 1" Binding="{Binding Readings[0], Mode=TwoWay}"/>
-                    <DataGridTextColumn Header="Reading 2" Binding="{Binding Readings[1], Mode=TwoWay}"/>
-                    <DataGridTextColumn Header="Reading 3" Binding="{Binding Readings[2], Mode=TwoWay}"/>
-                    <DataGridTextColumn Header="Average" Binding="{Binding Average}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Leakage Corrected" Binding="{Binding LeakageCorrectedValue}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Reading/MU" Binding="{Binding ReadingPerMUValue}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="% Diff vs 200" Binding="{Binding PercentDiffValue}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Result" Binding="{Binding Result}" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </GroupBox>
+                                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding LeakageTime1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LeakageReading1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
 
-    </Grid>
+                                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding LeakageTime2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LeakageReading2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+                            </Grid>
+
+                            <StackPanel Margin="30,0,0,0" VerticalAlignment="Bottom">
+                                <TextBlock Text="Leakage (nC/s)" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBox Text="{Binding CalculatedLeakageRate, StringFormat={}{0:F4}, Mode=OneWay}" 
+                                         Style="{StaticResource CalculatedTextBoxStyle}" Width="100" Height="25"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <TextBlock Text="Linearity" Margin="5,0,0,5"/>
+                        <Grid Margin="5,0,5,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Background="#F0F0F0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="60"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1"/>
+
+                                <TextBlock Grid.Column="0" Text="MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="1" Grid.ColumnSpan="3" Text="Dosemeter Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="4" Text="Avge (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="5" Text="Leakage corr avg" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="6" Text="Reading / MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="7" Text="%diff rel to 200MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                <TextBlock Grid.Column="8" Text="OK" Style="{StaticResource HeaderTextBlockStyle}"/>
+                            </Grid>
+
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding LinearityDataRows}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="25">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="60"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+
+                                            <TextBlock Grid.Column="0" Text="{Binding MU}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+
+                                            <TextBox Grid.Column="1" Text="{Binding Reading1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+                                            <TextBox Grid.Column="2" Text="{Binding Reading2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+                                            <TextBox Grid.Column="3" Text="{Binding Reading3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
+
+                                            <TextBox Grid.Column="4" Text="{Binding Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                            <TextBox Grid.Column="5" Text="{Binding LeakageCorrected, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                            <TextBox Grid.Column="6" Text="{Binding ReadingPerMU, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                            <TextBox Grid.Column="7" Text="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+
+                                            <TextBox Grid.Column="8" Text="{Binding StatusText, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

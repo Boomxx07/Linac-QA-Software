@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:Linac_QA_Software.Views"
         xmlns:helpers="clr-namespace:Linac_QA_Software.Helpers.LinacQA"
         mc:Ignorable="d"
-        Title="SCGH Linac QA" Height="450" Width="800">
+        Title="SCGH Linac QA" Height="900" Width="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="15" Orientation="Vertical">
             <!-- Header -->
