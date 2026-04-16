@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
-             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000"
              Background="White"
@@ -99,7 +99,7 @@
                                     <Grid Grid.Row="0" Background="#F0F0F0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="210"/>
                                             <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="70"/>
@@ -123,9 +123,9 @@
                                                 <Grid Height="25">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="40"/>
-                                                        <ColumnDefinition Width="50"/>
-                                                        <ColumnDefinition Width="50"/>
-                                                        <ColumnDefinition Width="50"/>
+                                                        <ColumnDefinition Width="70"/>
+                                                        <ColumnDefinition Width="70"/>
+                                                        <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
@@ -171,10 +171,7 @@
                                     <TextBlock Text="{Binding RegressionEquation}" Foreground="DarkRed"/>
                                 </StackPanel>
 
-                                <lvc:CartesianChart Series="{Binding Series}" 
-                                                    XAxes="{Binding XAxes}" 
-                                                    YAxes="{Binding YAxes}"
-                                                    MinHeight="300"/>
+                                <oxy:PlotView Model="{Binding PlotModel}" Height="300"/>
                             </DockPanel>
                         </Grid>
                     </GroupBox>

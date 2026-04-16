@@ -30,32 +30,32 @@ namespace Linac_QA_Software.ViewModels
         // User-entered readings (nC)
         // -------------------------------------------------------------------------
 
-        private double? _reading1, _reading2, _reading3;
+        private float? _reading1, _reading2, _reading3;
 
-        public double? Reading1 { get => _reading1; set { if (SetProperty(ref _reading1, value)) Recalculate(); } }
-        public double? Reading2 { get => _reading2; set { if (SetProperty(ref _reading2, value)) Recalculate(); } }
-        public double? Reading3 { get => _reading3; set { if (SetProperty(ref _reading3, value)) Recalculate(); } }
+        public float? Reading1 { get => _reading1; set { if (SetProperty(ref _reading1, value)) Recalculate(); } }
+        public float? Reading2 { get => _reading2; set { if (SetProperty(ref _reading2, value)) Recalculate(); } }
+        public float? Reading3 { get => _reading3; set { if (SetProperty(ref _reading3, value)) Recalculate(); } }
 
         // -------------------------------------------------------------------------
         // Calculated outputs (all read-only from the UI's perspective)
         // -------------------------------------------------------------------------
 
-        private double? _average, _leakageCorrected, _readingPerMu, _percentDiff;
+        private float? _average, _leakageCorrected, _readingPerMu, _percentDiff;
 
         /// <summary>Mean of whichever readings have been entered.</summary>
-        public double? Average { get => _average; private set => SetProperty(ref _average, value); }
+        public float? Average { get => _average; private set => SetProperty(ref _average, value); }
 
         /// <summary>Average reading minus the expected leakage during the delivery time.</summary>
-        public double? LeakageCorrected { get => _leakageCorrected; private set => SetProperty(ref _leakageCorrected, value); }
+        public float? LeakageCorrected { get => _leakageCorrected; private set => SetProperty(ref _leakageCorrected, value); }
 
         /// <summary>LeakageCorrected divided by MU — the normalised output used for linearity comparison.</summary>
-        public double? ReadingPerMU { get => _readingPerMu; private set => SetProperty(ref _readingPerMu, value); }
+        public float? ReadingPerMU { get => _readingPerMu; private set => SetProperty(ref _readingPerMu, value); }
 
         /// <summary>
         /// Percent difference of ReadingPerMU relative to the 200 MU reference row.
         /// Positive = higher output than reference; negative = lower.
         /// </summary>
-        public double? PercentDiff
+        public float? PercentDiff
         {
             get => _percentDiff;
             private set
@@ -82,7 +82,7 @@ namespace Linac_QA_Software.ViewModels
         /// Stored separately so that recalculation works even when the user hasn't
         /// entered all readings yet.
         /// </summary>
-        private double _leakageRate = 0.0;
+        private float _leakageRate = 0f;
 
         // -------------------------------------------------------------------------
         // Constructor
@@ -98,7 +98,7 @@ namespace Linac_QA_Software.ViewModels
         /// Called by EnergyConfigViewModel whenever the leakage rate changes.
         /// Triggers a recalculation so leakage correction stays current.
         /// </summary>
-        public void UpdateLeakageRate(double leakageRateNcPerSec)
+        public void UpdateLeakageRate(float leakageRateNcPerSec)
         {
             _leakageRate = leakageRateNcPerSec;
             Recalculate();
@@ -108,10 +108,10 @@ namespace Linac_QA_Software.ViewModels
         /// Called by EnergyConfigViewModel to set this row's percent difference
         /// relative to the 200 MU reference row.
         /// </summary>
-        public void UpdatePercentDiff(double referenceReadingPerMu)
+        public void UpdatePercentDiff(float referenceReadingPerMu)
         {
             if (ReadingPerMU.HasValue && Math.Abs(referenceReadingPerMu) > 1e-10)
-                PercentDiff = ((ReadingPerMU.Value - referenceReadingPerMu) / referenceReadingPerMu) * 100.0;
+                PercentDiff = ((ReadingPerMU.Value - referenceReadingPerMu) / referenceReadingPerMu) * 100f;
             else
                 PercentDiff = null;
         }
@@ -132,7 +132,7 @@ namespace Linac_QA_Software.ViewModels
                 Average = presentReadings.Average();
 
                 // Estimated beam-on time in seconds based on the assumed dose rate.
-                double deliveryTimeSec = MU / PhysicsCalculator.DoseRateMuPerSec;
+                float deliveryTimeSec = MU / PhysicsCalculator.DoseRateMuPerSec;
                 LeakageCorrected = Average - (_leakageRate * deliveryTimeSec);
                 ReadingPerMU = LeakageCorrected / MU;
             }

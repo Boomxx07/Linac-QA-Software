@@ -3,7 +3,7 @@
 // Owns:
 //   • The table of LinearityRowViewModels (one per MU setting)
 //   • Leakage measurement inputs and the derived leakage rate
-//   • The LiveCharts2 series data and regression result
+//   • The OxyPlot information
 //
 // When the user enters data, this class recalculates the regression and
 // updates the chart in response to the RowUpdated events from each row.
@@ -14,11 +14,9 @@ using System.Linq;
 using System.Windows;
 using Linac_QA_Software.Helpers;
 using Linac_QA_Software.Models;
-using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
 
 namespace Linac_QA_Software.ViewModels
 {
@@ -41,35 +39,35 @@ namespace Linac_QA_Software.ViewModels
         // Leakage measurement inputs
         // -------------------------------------------------------------------------
 
-        private double? _leakageTime1, _leakageReading1, _leakageTime2, _leakageReading2;
+        private string? _leakageTime1, _leakageReading1, _leakageTime2, _leakageReading2;
 
-        public double? LeakageTime1
+        public string? LeakageTime1
         {
             get => _leakageTime1;
             set { if (SetProperty(ref _leakageTime1, value)) RefreshLeakageRate(); }
         }
         public double? LeakageReading1
-        {
+{
             get => _leakageReading1;
             set { if (SetProperty(ref _leakageReading1, value)) RefreshLeakageRate(); }
         }
-        public double? LeakageTime2
+        public float? LeakageTime2
         {
             get => _leakageTime2;
             set { if (SetProperty(ref _leakageTime2, value)) RefreshLeakageRate(); }
         }
-        public double? LeakageReading2
+        public float? LeakageReading2
         {
             get => _leakageReading2;
             set { if (SetProperty(ref _leakageReading2, value)) RefreshLeakageRate(); }
         }
 
-        private double? _calculatedLeakageRate;
+        private float? _calculatedLeakageRate;
         /// <summary>
         /// Average leakage rate in nC/s derived from the two background measurements.
         /// Null until at least one valid measurement is entered.
         /// </summary>
-        public double? CalculatedLeakageRate
+        public float? CalculatedLeakageRate
         {
             get => _calculatedLeakageRate;
             private set
@@ -77,36 +75,32 @@ namespace Linac_QA_Software.ViewModels
                 if (!SetProperty(ref _calculatedLeakageRate, value)) return;
 
                 // Push the new rate into every row so they can recalculate.
-                double rate = value ?? 0.0;
+                float rate = value ?? 0.0f;
                 foreach (var row in Rows)
                     row.UpdateLeakageRate(rate);
             }
         }
 
         // -------------------------------------------------------------------------
-        // Chart properties (bound to a LiveCharts2 CartesianChart in XAML)
+        // Chart (OxyPlot) properties
         // -------------------------------------------------------------------------
 
-        /// <summary>
-        /// The two chart series: scattered data points and a linear trendline.
-        /// Backed by the private ObservableCollections below so LiveCharts2
-        /// can animate additions/removals automatically.
-        /// </summary>
-        public ObservableCollection<ISeries> Series { get; }
+        private PlotModel _plotModel;
+        public PlotModel PlotModel
+        {
+            get => _plotModel;
+            private set => SetProperty(ref _plotModel, value);
+        }
 
-        public Axis[] XAxes { get; }
-        public Axis[] YAxes { get; }
-
-        // Internal point lists referenced by the chart series.
-        private readonly ObservableCollection<ObservablePoint> _dataPoints = new();
-        private readonly ObservableCollection<ObservablePoint> _trendPoints = new();
+        private ScatterSeries _scatterSeries;
+        private LineSeries _trendLine;
 
         // -------------------------------------------------------------------------
         // Regression result properties (displayed below the chart)
         // -------------------------------------------------------------------------
 
-        private double _rSquared;
-        public double RSquared
+        private float _rSquared;
+        public float RSquared
         {
             get => _rSquared;
             private set => SetProperty(ref _rSquared, value);
@@ -136,32 +130,7 @@ namespace Linac_QA_Software.ViewModels
                 Rows.Add(row);
             }
 
-            // Set up the chart series once, referencing the shared point collections.
-            // LiveCharts2 watches these ObservableCollections for changes.
-            Series = new ObservableCollection<ISeries>
-            {
-                new ScatterSeries<ObservablePoint>
-                {
-                    Name       = "Measurements",
-                    Values     = _dataPoints,
-                    GeometrySize = 12,
-                    Fill       = new SolidColorPaint(SKColors.DodgerBlue),
-                    ZIndex     = 2
-                },
-                new LineSeries<ObservablePoint>
-                {
-                    Name            = "Linear Fit",
-                    Values          = _trendPoints,
-                    GeometrySize    = 0,
-                    Fill            = null,
-                    Stroke          = new SolidColorPaint(SKColors.Crimson, 3),
-                    LineSmoothness  = 0,
-                    ZIndex          = 1
-                }
-            };
-
-            XAxes = new[] { new Axis { Name = "Monitor Units (MU)" } };
-            YAxes = new[] { new Axis { Name = "Corrected Reading (nC)" } };
+            InitialisePlot();
         }
 
         // -------------------------------------------------------------------------
@@ -180,6 +149,45 @@ namespace Linac_QA_Software.ViewModels
         }
 
         /// <summary>
+        /// Sets up the OxyPlot
+        /// </summary>
+        private void InitialisePlot()
+        {
+            _scatterSeries = new ScatterSeries
+            {
+                Title = "Measurements",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 4
+            };
+
+            _trendLine = new LineSeries
+            {
+                Title = "Linear Fit",
+                StrokeThickness = 2
+            };
+
+            PlotModel = new PlotModel
+            {
+                //Title = EnergyName
+            };
+
+            PlotModel.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Monitor Units (MU)"
+            });
+
+            PlotModel.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Title = "Corrected Reading (nC)"
+            });
+
+            PlotModel.Series.Add(_scatterSeries);
+            PlotModel.Series.Add(_trendLine);
+        }
+
+        /// <summary>
         /// Rebuilds the chart data points and recalculates the linear regression
         /// whenever any row's readings change.  Runs on the UI thread because
         /// ObservableCollection mutations must occur there for WPF to notice them.
@@ -194,17 +202,22 @@ namespace Linac_QA_Software.ViewModels
                     .OrderBy(r => r.MU)
                     .ToList();
 
-                // Rebuild scatter-plot points.
-                _dataPoints.Clear();
+                // Clear current points and line then readd
+                _scatterSeries.Points.Clear();
+                _trendLine.Points.Clear();
+
                 foreach (var row in validRows)
-                    _dataPoints.Add(new ObservablePoint(row.MU, row.LeakageCorrected!.Value));
+                {
+                    _scatterSeries.Points.Add(
+                        new ScatterPoint(row.MU, row.LeakageCorrected!.Value));
+                }
 
                 // Need at least two points to fit a line.
                 if (validRows.Count < 2)
                 {
-                    _trendPoints.Clear();
                     RSquared = 0;
                     RegressionEquation = "Need 2+ data points";
+                    PlotModel.InvalidatePlot(true);
                     return;
                 }
 
@@ -219,20 +232,21 @@ namespace Linac_QA_Software.ViewModels
                 RSquared = result.RSquared;
                 RegressionEquation = result.Equation;
 
-                // Draw the trendline from the first to the last valid MU value.
-                double minX = validRows.First().MU;
-                double maxX = validRows.Last().MU;
-                _trendPoints.Clear();
-                _trendPoints.Add(new ObservablePoint(minX, result.Slope * minX + result.Intercept));
-                _trendPoints.Add(new ObservablePoint(maxX, result.Slope * maxX + result.Intercept));
+                // Plotting
+                float minX = validRows.First().MU;
+                float maxX = validRows.Last().MU;
 
-                // Update percent differences relative to the 200 MU reference row.
+                _trendLine.Points.Add(new DataPoint(minX, result.Slope * minX + result.Intercept));
+                _trendLine.Points.Add(new DataPoint(maxX, result.Slope * maxX + result.Intercept));
+
                 var refRow = Rows.FirstOrDefault(r => r.MU == 200);
                 if (refRow?.ReadingPerMU != null)
                 {
                     foreach (var row in Rows)
                         row.UpdatePercentDiff(refRow.ReadingPerMU.Value);
                 }
+
+                PlotModel.InvalidatePlot(true);
             });
         }
     }

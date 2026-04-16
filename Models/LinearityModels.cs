@@ -20,8 +20,8 @@ namespace Linac_QA_Software.Models
     /// </summary>
     public class LinearityPoint
     {
-        public double MU { get; set; }
-        public double CorrectedReading { get; set; }
+        public float MU { get; set; }
+        public float CorrectedReading { get; set; }
     }
 
     /// <summary>
@@ -30,9 +30,9 @@ namespace Linac_QA_Software.Models
     /// </summary>
     public class RegressionResult
     {
-        public double Slope { get; set; }
-        public double Intercept { get; set; }
-        public double RSquared { get; set; }
+        public float Slope { get; set; }
+        public float Intercept { get; set; }
+        public float RSquared { get; set; }
 
         /// <summary>Human-readable equation, e.g. "y = 0.01234x + 0.00056"</summary>
         public string Equation => $"y = {Slope:F5}x + {Intercept:F5}";
@@ -54,13 +54,13 @@ namespace Linac_QA_Software.Models
         /// leakage correction.  10 MU/s is standard for most clinical beams.
         /// Change this constant if your machines operate at a different rate.
         /// </summary>
-        public const double DoseRateMuPerSec = 600.0;
+        public const float DoseRateMuPerSec = 600f;
 
         /// <summary>
         /// Tolerance for the reading-per-MU percent difference, expressed as
         /// a percentage.  Results outside this band are flagged as FAIL.
         /// </summary>
-        public const double PercentDiffTolerance = 2.0;
+        public const float PercentDiffTolerance = 2f;
 
         /// <summary>
         /// Calculates the average leakage rate (nC/s) from up to two
@@ -70,11 +70,11 @@ namespace Linac_QA_Software.Models
         /// <param name="time1">Collection time for measurement 1 (seconds)</param>
         /// <param name="reading2">Electrometer reading for measurement 2 (nC)</param>
         /// <param name="time2">Collection time for measurement 2 (seconds)</param>
-        public static double? CalculateLeakageRate(
-            double? reading1, double? time1,
-            double? reading2, double? time2)
+        public static float? CalculateLeakageRate(
+            float? reading1, float? time1,
+            float? reading2, float? time2)
         {
-            double total = 0;
+            float total = 0;
             int count = 0;
 
             // Only include a measurement if a positive time interval was given.
@@ -94,22 +94,22 @@ namespace Linac_QA_Software.Models
             if (points == null || points.Count < 2) return null;
 
             int n = points.Count;
-            double sumX = points.Sum(p => p.MU);
-            double sumY = points.Sum(p => p.CorrectedReading);
-            double sumXY = points.Sum(p => p.MU * p.CorrectedReading);
-            double sumXX = points.Sum(p => p.MU * p.MU);
-            double sumYY = points.Sum(p => p.CorrectedReading * p.CorrectedReading);
+            float sumX = points.Sum(p => p.MU);
+            float sumY = points.Sum(p => p.CorrectedReading);
+            float sumXY = points.Sum(p => p.MU * p.CorrectedReading);
+            float sumXX = points.Sum(p => p.MU * p.MU);
+            float sumYY = points.Sum(p => p.CorrectedReading * p.CorrectedReading);
 
-            double denominator = n * sumXX - sumX * sumX;
+            float denominator = n * sumXX - sumX * sumX;
             if (Math.Abs(denominator) < 1e-10) return null; // All MU values are identical — can't fit.
 
-            double slope = (n * sumXY - sumX * sumY) / denominator;
-            double intercept = (sumY - slope * sumX) / n;
+            float slope = (n * sumXY - sumX * sumY) / denominator;
+            float intercept = (sumY - slope * sumX) / n;
 
             // Pearson r, then squared to give R²
-            double rNum = n * sumXY - sumX * sumY;
-            double rDen = Math.Sqrt((n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY));
-            double rSq = rDen > 1e-10 ? Math.Pow(rNum / rDen, 2) : 0;
+            float rNum = n * sumXY - sumX * sumY;
+            float rDen = (float)Math.Sqrt((n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY));
+            float rSq = (float)(rDen > 1e-10 ? Math.Pow(rNum / rDen, 2) : 0);
 
             return new RegressionResult { Slope = slope, Intercept = intercept, RSquared = rSq };
         }
