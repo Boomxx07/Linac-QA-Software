@@ -83,7 +83,7 @@ namespace Linac_QA_Software.Models
             float leakage = 0;
 
             // Only include a measurement if both times and readings exist (and time 2 > time 1).
-            if (time1 > 1e-10 && time2 > 1e-10 && time2 > time1 && reading1.HasValue && reading2.HasValue) {
+            if (time1 >= 0 && time2 > 1e-10 && time2 > time1 && reading1.HasValue && reading2.HasValue) {
                 leakage = (reading2.Value - reading1.Value) / (time2.Value - time1.Value);
             }
 

@@ -186,7 +186,7 @@ namespace Linac_QA_Software.ViewModels
 
                 // Estimated beam-on time in seconds based on the assumed dose rate.
                 int deliveryTimeSec = (int)(MU / PhysicsCalculator.DoseRateMuPerSec(EnergyName));
-                LeakageCorrected = Average - (_leakageRate * deliveryTimeSec);
+                LeakageCorrected = Average + (_leakageRate * deliveryTimeSec);
                 ReadingPerMU = LeakageCorrected / MU;
             }
             else

@@ -111,8 +111,8 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="40"/>
                                             <ColumnDefinition Width="210"/>
-                                            <ColumnDefinition Width="70"/>
-                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
                                             <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="60"/>
                                             <ColumnDefinition Width="40"/>
@@ -121,9 +121,9 @@
 
                                         <TextBlock Grid.Column="0" Text="MU" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="1" Text="Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="2" Text="Avg" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="3" Text="Corr." Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="4" Text="R/MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="2" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="3" Text="Leakage Corrected Avg. (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="4" Text="Reading/MU" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="5" Text="%Diff" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="6" Text="OK" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
@@ -137,8 +137,8 @@
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
-                                                        <ColumnDefinition Width="70"/>
-                                                        <ColumnDefinition Width="70"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="110"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="60"/>
                                                         <ColumnDefinition Width="40"/>
