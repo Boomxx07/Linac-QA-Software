@@ -8,7 +8,7 @@
         xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
         mc:Ignorable="d"
         Title="SCGH Linac QA" Height="900" Width="1000"
-        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}">
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel, IsDesignTimeCreatable=True}">
 
     <DockPanel Margin="15">
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
