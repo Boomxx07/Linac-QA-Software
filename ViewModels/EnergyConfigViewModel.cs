@@ -28,6 +28,7 @@ namespace Linac_QA_Software.ViewModels
 
         /// <summary>Display name for this beam energy, e.g. "6MV".</summary>
         public string EnergyName { get; }
+        public string MeasurementInstruction { get; }
 
         // -------------------------------------------------------------------------
         // Table rows — one per MU setting
@@ -151,6 +152,12 @@ namespace Linac_QA_Software.ViewModels
         public EnergyConfigViewModel(string energyName, int[] muValues)
         {
             EnergyName = energyName;
+
+            if (energyName == "6FFF")
+            {
+                MeasurementInstruction = "Field Size: 10 cm x 10 cm, SSD: 10 cm, Depth: 10 cm, Dose Rate: 1400 MU/min";
+            }
+            else MeasurementInstruction = "Field Size: 10 cm x 10 cm, SSD: 10 cm, Depth: 10 cm, Dose Rate: 600 MU/min";
 
             // Build one row per MU value and subscribe to its update event.
             Rows = new ObservableCollection<LinearityRowViewModel>();

@@ -6,6 +6,7 @@
              xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
              xmlns:helpers="clr-namespace:Linac_QA_Software.Helpers"
              xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+             helpers:ScrollViewerExtension.BubbleMouseWheel="True"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000"
              Background="White"
@@ -60,8 +61,16 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <StackPanel Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="{Binding MeasurementInstruction}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0"  Grid.Row="1" Margin="0,0,10,0">
 
                                 <TextBlock Text="Leakage Correction" Style="{StaticResource HeaderTextBlockStyle}" HorizontalAlignment="Left" Margin="0,0,0,5"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -114,8 +123,8 @@
                                             <ColumnDefinition Width="80"/>
                                             <ColumnDefinition Width="110"/>
                                             <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="60"/>
-                                            <ColumnDefinition Width="40"/>
                                         </Grid.ColumnDefinitions>
                                         <Border Grid.ColumnSpan="7" BorderBrush="Black" BorderThickness="1"/>
 
@@ -123,8 +132,8 @@
                                         <TextBlock Grid.Column="1" Text="Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="2" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="3" Text="Leakage Corrected Avg. (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="4" Text="Reading/MU" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="5" Text="%Diff" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="4" Text="Reading / MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="5" Text="% Diff Relative to 200 MU" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="6" Text="OK" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
 
@@ -140,8 +149,8 @@
                                                         <ColumnDefinition Width="80"/>
                                                         <ColumnDefinition Width="110"/>
                                                         <ColumnDefinition Width="70"/>
+                                                        <ColumnDefinition Width="100"/>
                                                         <ColumnDefinition Width="60"/>
-                                                        <ColumnDefinition Width="40"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1,0,1,1"/>
 
@@ -152,8 +161,8 @@
 
                                                     <TextBox Grid.Column="4" Text="{Binding Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
                                                     <TextBox Grid.Column="5" Text="{Binding LeakageCorrected, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                                                    <TextBox Grid.Column="6" Text="{Binding ReadingPerMU, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                                                    <TextBox Grid.Column="7" Text="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                                    <TextBox Grid.Column="6" Text="{Binding ReadingPerMU, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                                    <TextBox Grid.Column="7" Text="{Binding PercentDiff, StringFormat={}{0:F1}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
 
                                                     <TextBox Grid.Column="8"
                                                              Text="{Binding StatusText, Mode=OneWay}">
@@ -161,7 +170,10 @@
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding StatusText}" Value="FAIL">
-                                                                        <Setter Property="Foreground" Value="Red"/>
+                                                                        <Setter Property="Background" Value="Red"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding StatusText}" Value="OK">
+                                                                        <Setter Property="Background" Value="LawnGreen"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -174,7 +186,7 @@
                                 </Grid>
                             </StackPanel>
 
-                            <DockPanel Grid.Column="1" Margin="10,0,0,0">
+                            <DockPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" MaxWidth="600" helpers:ResponsiveVisibility.MinWidth="1000">
                                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                                     <TextBlock Text="R²: " FontWeight="Bold"/>
                                     <TextBlock Text="{Binding RSquared, StringFormat={}{0:F5}}" Foreground="DarkBlue" Margin="0,0,20,0"/>
