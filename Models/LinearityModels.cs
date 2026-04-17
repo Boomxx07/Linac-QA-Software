@@ -65,12 +65,6 @@ namespace Linac_QA_Software.Models
                 return 600 / 60; // Convert to MU/sec for all other beams
         }
 
-        // <summary>
-        // Tolerance for the reading-per-MU percent difference, expressed as
-        // a percentage.  Results outside this band are flagged as FAIL.
-        // </summary>
-        //public const float PercentDiffTolerance = 2f;
-
         /// <summary>
         /// Calculates the average leakage rate (nC/s) from up to two
         /// background measurements.  Returns null if no valid data is supplied.
