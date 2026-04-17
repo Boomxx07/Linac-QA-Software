@@ -156,7 +156,7 @@ namespace Linac_QA_Software.ViewModels
             Rows = new ObservableCollection<LinearityRowViewModel>();
             foreach (int mu in muValues)
             {
-                var row = new LinearityRowViewModel(mu);
+                var row = new LinearityRowViewModel(mu, energyName);
                 row.RowUpdated += (_, _) => RefreshChartAndRegression();
                 Rows.Add(row);
             }

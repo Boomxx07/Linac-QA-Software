@@ -26,7 +26,7 @@ namespace Linac_QA_Software.ViewModels
         /// <summary>The energyName corresponding to this section.</summary>
         public string EnergyName { get; }
         /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
-        public int MU { get; }
+        public float MU { get; }
         
         // -------------------------------------------------------------------------
         // User-entered readings (stored as strings to preserve input format, including trailing zeros)
@@ -125,7 +125,11 @@ namespace Linac_QA_Software.ViewModels
         // Constructor
         // -------------------------------------------------------------------------
 
-        public LinearityRowViewModel(int mu) => MU = mu;
+        public LinearityRowViewModel(int mu, string energyName)
+        {
+            MU = mu;
+            EnergyName = energyName;
+        }
 
         // -------------------------------------------------------------------------
         // Methods called by the parent ViewModel
@@ -184,8 +188,12 @@ namespace Linac_QA_Software.ViewModels
             {
                 Average = presentReadings.Average();
 
+                //Debugging code to check what doserate MU is being collected
+                //System.Diagnostics.Debug.WriteLine(EnergyName);
+                //System.Diagnostics.Debug.WriteLine(PhysicsCalculator.DoseRateMuPerSec(EnergyName));
+
                 // Estimated beam-on time in seconds based on the assumed dose rate.
-                int deliveryTimeSec = (int)(MU / PhysicsCalculator.DoseRateMuPerSec(EnergyName));
+                float deliveryTimeSec = (MU / PhysicsCalculator.DoseRateMuPerSec(EnergyName));
                 LeakageCorrected = Average + (_leakageRate * deliveryTimeSec);
                 ReadingPerMU = LeakageCorrected / MU;
             }

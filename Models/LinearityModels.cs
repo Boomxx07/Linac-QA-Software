@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Linac_QA_Software.Models
 {
@@ -54,10 +55,12 @@ namespace Linac_QA_Software.Models
         /// leakage correction.  10 MU/s is standard for most clinical beams.
         /// Change this constant if your machines operate at a different rate.
         /// </summary>
-        public static int? DoseRateMuPerSec(string energyName)
+        public static float DoseRateMuPerSec(string energyName)
         {
             if (energyName == "6FFF")
+            {
                 return 1400 / 60; // Convert to MU/sec
+            }
             else
                 return 600 / 60; // Convert to MU/sec for all other beams
         }
