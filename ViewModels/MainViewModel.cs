@@ -5,12 +5,13 @@
 // Commands for Save and Submit are defined here because they concern the
 // whole session, not any individual test.
 
+using Linac_QA_Software.Helpers;
+using Linac_QA_Software.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Linac_QA_Software.Helpers;
 
 namespace Linac_QA_Software.ViewModels
 {
@@ -27,11 +28,12 @@ namespace Linac_QA_Software.ViewModels
         // Session metadata
         // -------------------------------------------------------------------------
 
+        private readonly Config _config;
+
         /// <summary>Machine names available in the linac dropdown.</summary>
-        public ObservableCollection<string> LinacOptions { get; } = new()
-        {
-            "Acacia", "Banksia", "Tuart", "Jarrah", "Marri"
-        };
+        public ObservableCollection<string> LinacOptions { get; }
+        /// <summary>All physicists who may be listed as attending.</summary>
+        public ObservableCollection<string> PhysicistList { get; }
 
         private string _linac = "";
         /// <summary>The linac selected for this session.</summary>
@@ -48,18 +50,6 @@ namespace Linac_QA_Software.ViewModels
             get => _date;
             set => SetProperty(ref _date, value);
         }
-
-        /// <summary>All physicists who may be listed as attending.</summary>
-        public ObservableCollection<string> PhysicistList { get; } = new(
-            new[]
-            {
-                "Alison Scott",       "Andrew Hirst",     "Brani Rusanov",       "Broderick McCallum-Hee",
-                "Gabor Neveri",       "Gavin Pikes",      "Godfrey Mukwada",     "John Geraghty",
-                "Luke Slama",         "Mahsheed Sabet",   "Malgorzata Skorska",  "Mounir Ibrahim",
-                "Nathaniel Barry",    "Sivakumar Somangili", "Talat Mahmood",    "Tom Milan",
-                "Zaid Alkhatib"
-            }.OrderBy(x => x)
-        );
 
         /// <summary>
         /// Physicists ticked as present for this session.
@@ -80,6 +70,10 @@ namespace Linac_QA_Software.ViewModels
 
         public MainViewModel()
         {
+            _config = ConfigLoader.Load();
+            LinacOptions = new ObservableCollection<string>(_config.Machines);
+            PhysicistList = new ObservableCollection<string>(_config.Physicists.OrderBy(x => x));
+
             LinearityVM = new LinearityViewModel();
             SaveCommand = new RelayCommand(Save);
             SubmitCommand = new RelayCommand(Submit);
