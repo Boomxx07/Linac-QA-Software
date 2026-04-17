@@ -104,7 +104,7 @@ namespace Linac_QA_Software.ViewModels
 
         /// <summary>
         /// Pass/fail string derived from PercentDiff.
-        /// Empty when no data is available; "OK" within ±2 %; "FAIL" otherwise.
+        /// Uses StatusEvaluator.
         /// </summary>
         public string StatusText => PercentDiff.HasValue
             ? StatusEvaluator.EvaluateRelative(PercentDiff.Value, 0, failDiff: 2, cautionaryDiff: 1).ToString()
