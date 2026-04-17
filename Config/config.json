@@ -33,11 +33,6 @@
       "Baseline": 0,
       "Caution": 1,
       "Fail": 2
-    },
-    {
-      "Name": "Flatness",
-      "Baseline": 0.0,
-      "Fail": 2.0
     }
   ]
 }
