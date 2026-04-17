@@ -134,7 +134,7 @@
                                         <TextBlock Grid.Column="3" Text="Leakage Corrected Avg. (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="4" Text="Reading / MU" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="5" Text="% Diff Relative to 200 MU" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="6" Text="OK" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="6" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
 
                                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Rows}">
