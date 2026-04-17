@@ -54,7 +54,13 @@ namespace Linac_QA_Software.Models
         /// leakage correction.  10 MU/s is standard for most clinical beams.
         /// Change this constant if your machines operate at a different rate.
         /// </summary>
-        public const float DoseRateMuPerSec = 600f;
+        public static int? DoseRateMuPerSec(string energyName)
+        {
+            if (energyName == "6FFF")
+                return 1400 / 60; // Convert to MU/sec
+            else
+                return 600 / 60; // Convert to MU/sec for all other beams
+        }
 
         /// <summary>
         /// Tolerance for the reading-per-MU percent difference, expressed as
@@ -74,14 +80,14 @@ namespace Linac_QA_Software.Models
             float? reading1, float? time1,
             float? reading2, float? time2)
         {
-            float total = 0;
-            int count = 0;
+            float leakage = 0;
 
-            // Only include a measurement if a positive time interval was given.
-            if (time1 > 1e-10 && reading1.HasValue) { total += reading1.Value / time1.Value; count++; }
-            if (time2 > 1e-10 && reading2.HasValue) { total += reading2.Value / time2.Value; count++; }
+            // Only include a measurement if both times and readings exist (and time 2 > time 1).
+            if (time1 > 1e-10 && time2 > 1e-10 && time2 > time1 && reading1.HasValue && reading2.HasValue) {
+                leakage = (reading2.Value - reading1.Value) / (time2.Value - time1.Value);
+            }
 
-            return count > 0 ? total / count : null;
+            return leakage;
         }
 
         /// <summary>

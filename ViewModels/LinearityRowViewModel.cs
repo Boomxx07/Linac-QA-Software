@@ -23,9 +23,11 @@ namespace Linac_QA_Software.ViewModels
         // Identity
         // -------------------------------------------------------------------------
 
+        /// <summary>The energyName corresponding to this section.</summary>
+        public string EnergyName { get; }
         /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
         public int MU { get; }
-
+        
         // -------------------------------------------------------------------------
         // User-entered readings (stored as strings to preserve input format, including trailing zeros)
         // -------------------------------------------------------------------------
@@ -183,7 +185,7 @@ namespace Linac_QA_Software.ViewModels
                 Average = presentReadings.Average();
 
                 // Estimated beam-on time in seconds based on the assumed dose rate.
-                float deliveryTimeSec = MU / PhysicsCalculator.DoseRateMuPerSec;
+                int deliveryTimeSec = (int)(MU / PhysicsCalculator.DoseRateMuPerSec(EnergyName));
                 LeakageCorrected = Average - (_leakageRate * deliveryTimeSec);
                 ReadingPerMU = LeakageCorrected / MU;
             }
