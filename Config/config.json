@@ -1,0 +1,43 @@
+{
+  "Machines": [
+    "Acacia",
+    "Banksia",
+    "Tuart",
+    "Jarrah",
+    "Marri"
+  ],
+
+  "Physicists": [
+    "Alison Scott",
+    "Andrew Hirst",
+    "Brani Rusanov",
+    "Broderick McCallum-Hee",
+    "Gabor Neveri",
+    "Gavin Pikes",
+    "Godfrey Mukwada",
+    "John Geraghty",
+    "Luke Slama",
+    "Mahsheed Sabet",
+    "Malgorzata Skorska",
+    "Mounir Ibrahim",
+    "Nathaniel Barry",
+    "Sivakumar Somangili",
+    "Talat Mahmood",
+    "Tom Milan",
+    "Zaid Alkhatib"
+  ],
+
+  "Tests": [
+    {
+      "Name": "Linearity",
+      "Baseline": 0,
+      "Caution": 1,
+      "Fail": 2
+    },
+    {
+      "Name": "Flatness",
+      "Baseline": 0.0,
+      "Fail": 2.0
+    }
+  ]
+}
