@@ -107,7 +107,7 @@ namespace Linac_QA_Software.ViewModels
         /// Empty when no data is available; "OK" within ±2 %; "FAIL" otherwise.
         /// </summary>
         public string StatusText => PercentDiff.HasValue
-            ? (Math.Abs(PercentDiff.Value) <= PhysicsCalculator.PercentDiffTolerance ? "OK" : "FAIL")
+            ? StatusEvaluator.EvaluateRelative(PercentDiff.Value, 0, failDiff: 2, cautionaryDiff: 1).ToString()
             : "";
 
         // -------------------------------------------------------------------------

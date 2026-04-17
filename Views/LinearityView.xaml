@@ -8,7 +8,7 @@
              xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
              helpers:ScrollViewerExtension.BubbleMouseWheel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1000"
+             d:DesignHeight="800" d:DesignWidth="1200"
              Background="White"
              d:DataContext="{d:DesignInstance Type=viewmodels:LinearityViewModel, IsDesignTimeCreatable=True}">
 
@@ -124,7 +124,7 @@
                                             <ColumnDefinition Width="110"/>
                                             <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="90"/>
                                         </Grid.ColumnDefinitions>
                                         <Border Grid.ColumnSpan="7" BorderBrush="Black" BorderThickness="1"/>
 
@@ -150,7 +150,7 @@
                                                         <ColumnDefinition Width="110"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="100"/>
-                                                        <ColumnDefinition Width="60"/>
+                                                        <ColumnDefinition Width="90"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1,0,1,1"/>
 
@@ -172,6 +172,9 @@
                                                                     <DataTrigger Binding="{Binding StatusText}" Value="FAIL">
                                                                         <Setter Property="Background" Value="Red"/>
                                                                     </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding StatusText}" Value="CAUTIONARY">
+                                                                        <Setter Property="Background" Value="Orange"/>
+                                                                    </DataTrigger>
                                                                     <DataTrigger Binding="{Binding StatusText}" Value="OK">
                                                                         <Setter Property="Background" Value="LawnGreen"/>
                                                                     </DataTrigger>
@@ -186,7 +189,7 @@
                                 </Grid>
                             </StackPanel>
 
-                            <DockPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" MaxWidth="600" helpers:ResponsiveVisibility.MinWidth="1000">
+                            <DockPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" MaxWidth="600" helpers:ResponsiveVisibility.MinWidth="1050">
                                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                                     <TextBlock Text="R²: " FontWeight="Bold"/>
                                     <TextBlock Text="{Binding RSquared, StringFormat={}{0:F5}}" Foreground="DarkBlue" Margin="0,0,20,0"/>
