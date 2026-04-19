@@ -24,6 +24,9 @@ namespace Linac_QA_Software.ViewModels
         /// <summary>ViewModel for the Linearity QA tab.</summary>
         public LinearityViewModel LinearityVM { get; }
 
+        /// <summary>ViewModel for the Output Factor QA tab.</summary>
+        public OutputFactorViewModel OutputFactorVM { get; }
+
         // -------------------------------------------------------------------------
         // Session metadata
         // -------------------------------------------------------------------------
@@ -75,6 +78,7 @@ namespace Linac_QA_Software.ViewModels
             PhysicistList = new ObservableCollection<string>(_config.Physicists.OrderBy(x => x));
 
             LinearityVM = new LinearityViewModel();
+            OutputFactorVM = new OutputFactorViewModel();
             SaveCommand = new RelayCommand(Save);
             SubmitCommand = new RelayCommand(Submit);
         }

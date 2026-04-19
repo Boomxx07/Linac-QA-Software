@@ -58,6 +58,10 @@
                 <TextBlock Text="Linearity" FontSize="20" FontWeight="Bold" Margin="0,10"/>
                 <views:LinearityView DataContext="{Binding LinearityVM}" />
 
+                <Separator Margin="0,10"/>
+                <TextBlock Text="Output Factor" FontSize="20" FontWeight="Bold" Margin="0,10"/>
+                <views:OutputFactorView DataContext="{Binding OutputFactorVM}" />
+
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
