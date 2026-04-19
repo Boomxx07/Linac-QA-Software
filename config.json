@@ -52,6 +52,17 @@
         "2x2 (MLC)": { "Baseline": 0.90, "Caution": 0.02, "Fail": 0.05 },
         "3x3 (MLC)": { "Baseline": 0.92, "Caution": 0.02, "Fail": 0.05 }
       }
+    },
+    {
+      "Name": "TPR2010",
+      "Baseline": 0.65,
+      "Caution": 0.02,
+      "Fail": 0.05,
+      "FieldSizeThresholds": {
+        "6MV": { "Baseline": 0.65, "Caution": 0.02, "Fail": 0.05 },
+        "10MV": { "Baseline": 0.67, "Caution": 0.02, "Fail": 0.05 },
+        "6FFF": { "Baseline": 0.66, "Caution": 0.02, "Fail": 0.05 }
+      }
     }
   ]
 }

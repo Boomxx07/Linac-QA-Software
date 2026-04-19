@@ -27,6 +27,9 @@ namespace Linac_QA_Software.ViewModels
         /// <summary>ViewModel for the Output Factor QA tab.</summary>
         public OutputFactorViewModel OutputFactorVM { get; }
 
+        /// <summary>ViewModel for the TPR2010 QA tab.</summary>
+        public TPR2010ViewModel TPR2010VM { get; }
+
         // -------------------------------------------------------------------------
         // Session metadata
         // -------------------------------------------------------------------------
@@ -79,6 +82,7 @@ namespace Linac_QA_Software.ViewModels
 
             LinearityVM = new LinearityViewModel();
             OutputFactorVM = new OutputFactorViewModel();
+            TPR2010VM = new TPR2010ViewModel();
             SaveCommand = new RelayCommand(Save);
             SubmitCommand = new RelayCommand(Submit);
         }
