@@ -1,7 +1,7 @@
 ﻿// Purpose: ViewModel for a single row in the linearity data table.
 //
 // Each row represents one MU setting (e.g. 5 MU, 10 MU, 200 MU).
-// The user enters up to three electrometer readings; this class computes
+/// The user enters up to three electrometer readings; this class computes
 // the average, leakage-corrected value, reading-per-MU, and pass/fail status.
 
 using System;
@@ -27,6 +27,18 @@ namespace Linac_QA_Software.ViewModels
         public string EnergyName { get; }
         /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
         public float MU { get; }
+
+        // -------------------------------------------------------------------------
+        // Configuration (loaded from config.json)
+        // -------------------------------------------------------------------------
+        private static Config _config;
+        private static TestConfig _linearityConfig;
+
+        static LinearityRowViewModel()
+        {
+            _config = ConfigLoader.Load("config.json");
+            _linearityConfig = _config.Tests.FirstOrDefault(t => t.Name == "Linearity");
+        }
         
         // -------------------------------------------------------------------------
         // User-entered readings (stored as strings to preserve input format, including trailing zeros)
@@ -104,10 +116,10 @@ namespace Linac_QA_Software.ViewModels
 
         /// <summary>
         /// Pass/fail string derived from PercentDiff.
-        /// Uses StatusEvaluator.
+        /// Uses StatusEvaluator with values loaded from config.json.
         /// </summary>
-        public string StatusText => PercentDiff.HasValue
-            ? StatusEvaluator.EvaluateRelative(PercentDiff.Value, 0, failDiff: 2, cautionaryDiff: 1).ToString()
+        public string StatusText => PercentDiff.HasValue && _linearityConfig != null
+            ? StatusEvaluator.EvaluateRelative(PercentDiff.Value, _linearityConfig.Baseline, failDiff: _linearityConfig.Fail, cautionaryDiff: _linearityConfig.Caution).ToString()
             : "";
 
         // -------------------------------------------------------------------------
