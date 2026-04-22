@@ -67,6 +67,7 @@ namespace Linac_QA_Software.Helpers
         {
             if (sender is not TextBox textBox) return;
 
+            // Get what the text WILL look like if we allow this input
             string newText = GetResultingText(textBox, e.Text);
 
             if (!IsValidNumeric(newText))
@@ -81,18 +82,24 @@ namespace Linac_QA_Software.Helpers
         {
             if (sender is not TextBox textBox) return;
 
-            // Allow standard editing operations
-            if (e.Key == Key.Back || e.Key == Key.Delete || e.Key == Key.Tab || e.Key == Key.Enter)
+            // Block spacebar (PreviewTextInput doesn't catch it)
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // Allow standard navigation/edit keys
+            if (e.Key == Key.Back || e.Key == Key.Delete || e.Key == Key.Tab || e.Key == Key.Enter ||
+                e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Home || e.Key == Key.End)
                 return;
 
-            // Allow Ctrl+A, Ctrl+C, Ctrl+X (select all, copy, cut)
-            if ((Keyboard.Modifiers & ModifierKeys.Control) != 0 &&
-                (e.Key == Key.A || e.Key == Key.C || e.Key == Key.X))
-                return;
-
-            // Allow arrow keys, Home, End
-            if (e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Home || e.Key == Key.End)
-                return;
+            // Allow Ctrl+A, C, X, V
+            if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
+            {
+                if (e.Key == Key.A || e.Key == Key.C || e.Key == Key.X || e.Key == Key.V)
+                    return;
+            }
         }
 
         /// <summary>
@@ -126,11 +133,8 @@ namespace Linac_QA_Software.Helpers
             int selectionStart = textBox.SelectionStart;
             int selectionLength = textBox.SelectionLength;
 
-            // Remove selected text and insert new text at cursor position
-            string result = currentText.Remove(selectionStart, selectionLength)
-                                       .Insert(selectionStart, newText);
-
-            return result;
+            return currentText.Remove(selectionStart, selectionLength)
+                              .Insert(selectionStart, newText);
         }
 
         /// <summary>
@@ -186,6 +190,15 @@ namespace Linac_QA_Software.Helpers
                 return false;
             if (minusCount == 1 && text[0] != '-')
                 return false; // Minus sign not at the beginning
+
+            // If it ends with a dot, we've already validated the structure above, 
+            // so we skip the TryParse (which would fail on "5.")
+            if (text.EndsWith("."))
+            {
+                string partBeforeDot = text.TrimEnd('.');
+                if (string.IsNullOrEmpty(partBeforeDot) || partBeforeDot == "-") return true;
+                return float.TryParse(partBeforeDot, out _);
+            }
 
             // Attempt to parse as float to ensure it's within valid numeric range
             // (This catches edge cases like "999999999999999999" that overflow)

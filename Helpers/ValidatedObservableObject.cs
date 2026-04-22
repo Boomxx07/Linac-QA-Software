@@ -83,12 +83,8 @@ namespace Linac_QA_Software.Helpers
         /// </summary>
         protected void ClearErrors([CallerMemberName] string? propertyName = null)
         {
-            if (string.IsNullOrEmpty(propertyName))
-                return;
-
-            if (_errors.ContainsKey(propertyName) && _errors[propertyName].Count > 0)
+            if (!string.IsNullOrEmpty(propertyName) && _errors.Remove(propertyName))
             {
-                _errors[propertyName].Clear();
                 RaiseErrorsChanged(propertyName);
             }
         }
@@ -99,7 +95,27 @@ namespace Linac_QA_Software.Helpers
         /// </summary>
         private void RaiseErrorsChanged(string propertyName)
         {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            var handler = ErrorsChanged;
+            if (handler != null)
+            {
+                // Access the WPF Application Dispatcher
+                var dispatcher = System.Windows.Application.Current?.Dispatcher;
+
+                if (dispatcher != null && !dispatcher.CheckAccess())
+                {
+                    // If we're not on the UI thread, marshal the call back to it
+                    dispatcher.BeginInvoke(new Action(() =>
+                        handler.Invoke(this, new DataErrorsChangedEventArgs(propertyName))));
+                }
+                else
+                {
+                    // Already on the UI thread, invoke directly
+                    handler.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+                }
+            }
+
+            // This already uses the thread-safe OnPropertyChanged the base class.
+            OnPropertyChanged(nameof(HasErrors));
         }
 
         /// <summary>

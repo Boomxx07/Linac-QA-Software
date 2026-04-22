@@ -14,7 +14,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using Linac_QA_Software.Helpers;
-using Linac_QA_Software.Models;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;

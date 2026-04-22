@@ -29,10 +29,10 @@ namespace Linac_QA_Software.ViewModels
         public ObservableCollection<EDWOutputFactorRowViewModel> Rows { get; }
 
         // Results for the merged columns
-        public EDWResult Wedge15Result { get; } = new EDWResult();
-        public EDWResult Wedge30Result { get; } = new EDWResult();
-        public EDWResult Wedge45Result { get; } = new EDWResult();
-        public EDWResult Wedge60Result { get; } = new EDWResult();
+        public EDWData Wedge15Result { get; } = new EDWData();
+        public EDWData Wedge30Result { get; } = new EDWData();
+        public EDWData Wedge45Result { get; } = new EDWData();
+        public EDWData Wedge60Result { get; } = new EDWData();
 
         // -------------------------------------------------------------------------
         // Constructor
@@ -65,7 +65,7 @@ namespace Linac_QA_Software.ViewModels
             UpdateWedgeResult(Wedge60Result, openAvg, (Rows[7].Average + Rows[8].Average) / 2f, "60");
         }
 
-        private void UpdateWedgeResult(EDWResult result, float? openAvg, float? wedgeAvg, string label)
+        private void UpdateWedgeResult(EDWData result, float? openAvg, float? wedgeAvg, string label)
         {
             if (openAvg == null || wedgeAvg == null || openAvg == 0)
             {

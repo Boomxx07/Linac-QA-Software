@@ -1,33 +1,31 @@
-﻿// Purpose: Top-level ViewModel for the Linearity QA test tab.
-//
-// Responsibilities are deliberately minimal here — this class just creates
-// and owns the list of EnergyConfigViewModels (one per beam energy).
-// All per-energy logic lives in EnergyConfigViewModel.
-
+﻿using Linac_QA_Software.Helpers;
+using Linac_QA_Software.Models;
 using System.Collections.ObjectModel;
-using Linac_QA_Software.Helpers;
 
 namespace Linac_QA_Software.ViewModels
 {
+    /// <summary>
+    /// Top-level ViewModel for the Linearity QA test tab.
+    /// Owns the collection of energy-specific controllers.
+    /// </summary>
     public class LinearityViewModel : ObservableObject
     {
-        /// <summary>
-        /// One entry per beam energy tested (e.g. 6MV, 10MV, 6FFF).
-        /// Each is rendered as a separate section or tab in the LinearityView.
-        /// </summary>
-        public ObservableCollection<EnergyConfigViewModel> EnergyConfigs { get; }
+        public ObservableCollection<LinearityEnergyViewModel> EnergyConfigs { get; }
 
         public LinearityViewModel()
         {
+            // 1. Load configuration once at the top level
+            var config = ConfigLoader.Load("config.json");
+            
             // Standard MU settings for a photon linearity test.
-            // Adjust these if your clinic's protocol uses different values.
-            int[] photonMUs = { 5, 10, 50, 100, 200, 400, 900 };
+            // Notice we use double arrays now to match the high-precision physics layer.
+            double[] photonMUs = { 5, 10, 50, 100, 200, 400, 900 };
 
-            EnergyConfigs = new ObservableCollection<EnergyConfigViewModel>
+            EnergyConfigs = new ObservableCollection<LinearityEnergyViewModel>
             {
-                new EnergyConfigViewModel("6MV",   photonMUs),
-                new EnergyConfigViewModel("10MV",  photonMUs),
-                new EnergyConfigViewModel("6FFF",  photonMUs),
+                new LinearityEnergyViewModel("6MV",   photonMUs, config),
+                new LinearityEnergyViewModel("10MV",  photonMUs, config),
+                new LinearityEnergyViewModel("6FFF",  photonMUs, config),
             };
         }
     }

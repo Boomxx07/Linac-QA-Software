@@ -14,9 +14,12 @@ using System.Windows.Controls;
 
 namespace Linac_QA_Software.Helpers
 {
+    /// <summary>
+    /// Attached property that bridges a WPF ListBox's SelectedItems collection to a ViewModel property.
+    /// Since ListBox.SelectedItems is not a DependencyProperty, this helper enables two-way-like binding.
+    /// </summary>
     public static class ListBoxHelper
     {
-        // Registers the attached dependency property with WPF's property system.
         public static readonly DependencyProperty SelectedItemsProperty =
             DependencyProperty.RegisterAttached(
                 "SelectedItems",
@@ -30,22 +33,21 @@ namespace Linac_QA_Software.Helpers
         public static IList GetSelectedItems(DependencyObject element)
             => (IList)element.GetValue(SelectedItemsProperty);
 
-        /// <summary>
-        /// Called once when the attached property is first set on a ListBox.
-        /// Hooks the SelectionChanged event so we can keep the bound list in sync.
-        /// </summary>
         private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not ListBox listBox) return;
 
-            // Unsubscribe before subscribing to prevent duplicate handlers
-            // if the property is ever re-assigned at runtime.
+            // Clean up old event subscription to prevent memory leaks
             listBox.SelectionChanged -= ListBox_SelectionChanged;
-            listBox.SelectionChanged += ListBox_SelectionChanged;
+
+            if (e.NewValue is IList)
+            {
+                listBox.SelectionChanged += ListBox_SelectionChanged;
+            }
         }
 
         /// <summary>
-        /// Mirrors the ListBox's current selection into the bound ViewModel collection.
+        /// Syncs the View selection changes into the ViewModel's collection.
         /// </summary>
         private static void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -54,10 +56,23 @@ namespace Linac_QA_Software.Helpers
             var boundList = GetSelectedItems(listBox);
             if (boundList == null) return;
 
-            // Rebuild the bound list from scratch on every change.
-            boundList.Clear();
-            foreach (var item in listBox.SelectedItems)
-                boundList.Add(item);
+            // 1. Remove items that were unselected in the UI
+            foreach (var item in e.RemovedItems)
+            {
+                if (boundList.Contains(item))
+                {
+                    boundList.Remove(item);
+                }
+            }
+
+            // 2. Add items that were newly selected in the UI
+            foreach (var item in e.AddedItems)
+            {
+                if (!boundList.Contains(item))
+                {
+                    boundList.Add(item);
+                }
+            }
         }
     }
 }

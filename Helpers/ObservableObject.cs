@@ -17,7 +17,25 @@ namespace Linac_QA_Software.Helpers
         /// property's name, so you rarely need to pass it explicitly.
         /// </summary>
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                var dispatcher = System.Windows.Application.Current?.Dispatcher;
+
+                if (dispatcher != null && !dispatcher.CheckAccess())
+                {
+                    // If we are on a background thread, invoke on the UI thread
+                    dispatcher.BeginInvoke(new Action(() =>
+                        handler.Invoke(this, new PropertyChangedEventArgs(propertyName))));
+                }
+                else
+                {
+                    // Already on the UI thread
+                    handler.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+        }
 
         /// <summary>
         /// Sets the backing field to a new value and fires PropertyChanged,
@@ -25,7 +43,11 @@ namespace Linac_QA_Software.Helpers
         /// </summary>
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (Equals(storage, value)) return false;
+            // Note the EqualityComparer<T> avoids boxing (i.e. if a value type is used, it won't be boxed to object for comparison).  This is more
+            // efficient than using object.Equals() or EqualityComparer.Default.Equals() which would box (wrap inside an object) value types.
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+                return false;
+
             storage = value;
             OnPropertyChanged(propertyName);
             return true;

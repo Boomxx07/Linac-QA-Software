@@ -13,42 +13,11 @@
              d:DataContext="{d:DesignInstance Type=viewmodels:LinearityViewModel, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
-        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
-            <Setter Property="Background" Value="#E0FFFF"/>
-            <Setter Property="Margin" Value="1"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="helpers:NumericInputBehavior.IsNumericOnly" Value="True"/>
-            <Style.Triggers>
-                <!-- Show red border when validation errors are present -->
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="BorderBrush" Value="Red"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="CalculatedTextBoxStyle" TargetType="TextBox">
-            <Setter Property="Background" Value="#E6E6FA"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="Margin" Value="1"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-
-        <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="2"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/QAStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -67,11 +36,10 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,10">
-                                <TextBlock Text="{Binding MeasurementInstruction}"/>
+                                <TextBlock Text="{Binding MeasurementInstruction}" FontStyle="Italic" Foreground="Gray"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="0"  Grid.Row="1" Margin="0,0,10,0">
-
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,10,0">
                                 <TextBlock Text="Leakage Correction" Style="{StaticResource HeaderTextBlockStyle}" HorizontalAlignment="Left" Margin="0,0,0,5"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                                     <Grid>
@@ -121,19 +89,19 @@
                                             <ColumnDefinition Width="40"/>
                                             <ColumnDefinition Width="210"/>
                                             <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="110"/>
-                                            <ColumnDefinition Width="70"/>
                                             <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="90"/>
                                         </Grid.ColumnDefinitions>
                                         <Border Grid.ColumnSpan="7" BorderBrush="Black" BorderThickness="1"/>
 
                                         <TextBlock Grid.Column="0" Text="MU" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="1" Text="Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="2" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="3" Text="Leakage Corrected Avg. (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="4" Text="Reading / MU" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="5" Text="% Diff Relative to 200 MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="2" Text="Avg (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="3" Text="Corr. Avg" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="4" Text="Rdg/MU" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="5" Text="% Diff" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="6" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
 
@@ -147,9 +115,9 @@
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="80"/>
-                                                        <ColumnDefinition Width="110"/>
-                                                        <ColumnDefinition Width="70"/>
                                                         <ColumnDefinition Width="100"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition Width="90"/>
                                                         <ColumnDefinition Width="90"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1,0,1,1"/>
@@ -161,17 +129,17 @@
 
                                                     <TextBox Grid.Column="4" Text="{Binding Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
                                                     <TextBox Grid.Column="5" Text="{Binding LeakageCorrected, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                                                    <TextBox Grid.Column="6" Text="{Binding ReadingPerMU, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                                    <TextBox Grid.Column="6" Text="{Binding ReadingPerMU, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
 
                                                     <TextBox Grid.Column="7">
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
-                                                                <Setter Property="Text" Value="{Binding PercentDiff, StringFormat={}{0:F1}, Mode=OneWay}"/>
+                                                                <Setter Property="Text" Value="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}"/>
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsReference}" Value="True">
-                                                                        <Setter Property="Text" Value="N/A"/>
-                                                                        <Setter Property="Background" Value="White"/>
-                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                        <Setter Property="Text" Value="Ref"/>
+                                                                        <Setter Property="Background" Value="#F8F8F8"/>
+                                                                        <Setter Property="FontStyle" Value="Italic"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -186,30 +154,20 @@
                                                                     <DataTrigger Binding="{Binding IsReference}" Value="True">
                                                                         <Setter Property="Text" Value="N/A"/>
                                                                         <Setter Property="Background" Value="White"/>
-                                                                        <Setter Property="BorderThickness" Value="0"/>
                                                                     </DataTrigger>
-
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
-                                                                            <Condition Binding="{Binding StatusText}" Value="FAIL"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Background" Value="Red"/>
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
-                                                                            <Condition Binding="{Binding StatusText}" Value="CAUTIONARY"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Background" Value="Orange"/>
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
-                                                                            <Condition Binding="{Binding StatusText}" Value="OK"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Background" Value="LawnGreen"/>
-                                                                    </MultiDataTrigger>
+                                                                    <DataTrigger Binding="{Binding StatusText}" Value="FAIL">
+                                                                        <Setter Property="Background" Value="#FFCCCC"/>
+                                                                        <Setter Property="Foreground" Value="Red"/>
+                                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding StatusText}" Value="CAUTION">
+                                                                        <Setter Property="Background" Value="#FFF0C2"/>
+                                                                        <Setter Property="Foreground" Value="#856404"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding StatusText}" Value="OK">
+                                                                        <Setter Property="Background" Value="#D4EDDA"/>
+                                                                        <Setter Property="Foreground" Value="#155724"/>
+                                                                    </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </TextBox.Style>
@@ -229,7 +187,7 @@
                                     <TextBlock Text="{Binding RegressionEquation}" Foreground="DarkRed"/>
                                 </StackPanel>
 
-                                <oxy:PlotView Model="{Binding PlotModel}" Height="300"/>
+                                <oxy:PlotView Model="{Binding PlotModel}" Height="350"/>
                             </DockPanel>
                         </Grid>
                     </GroupBox>

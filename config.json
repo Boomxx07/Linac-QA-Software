@@ -1,3 +1,5 @@
+// This file contains configuration data for linac QA.
+
 {
   "Machines": [
     "Acacia",
@@ -6,7 +8,6 @@
     "Jarrah",
     "Marri"
   ],
-
   "Physicists": [
     "Alison Scott",
     "Andrew Hirst",
@@ -26,221 +27,247 @@
     "Tom Milan",
     "Zaid Alkhatib"
   ],
-  
   "Tests": [
     {
       "Name": "Linearity",
-      "Baseline": 0,
-      "Caution": 1,
-      "Fail": 2
+      "GlobalThreshold": {
+        "Baseline": 0,
+        "Caution": 1,
+        "Fail": 2
+      }
+    },
+    {
+      "Name": "TPR2010",
+      "Energy": {
+        "6MV": {
+          "Baseline": 0.669,
+          "Caution": 1.0,
+          "Fail": 2.0
+        },
+        "10MV": {
+          "Baseline": 0.730,
+          "Caution": 1.0,
+          "Fail": 2.0
+        },
+        "6FFF": {
+          "Baseline": 0.629,
+          "Caution": 1.0,
+          "Fail": 2.0
+        }
+      }
     },
     {
       "Name": "OutputFactor",
-      "EnergyThresholds": {
+      "Energy": {
         "6MV": {
           "3x3": {
-            "Baseline": 0.95,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.957,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "7x7": {
-            "Baseline": 0.97,
-            "Caution": 0.02,
-            "Fail": 0.05
-          },
-          "10x10": {
-            "Baseline": 1.0,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.981,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "20x20": {
-            "Baseline": 1.02,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 1.034,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x40": {
-            "Baseline": 1.05,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 1.058,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "3x5": {
-            "Baseline": 0.96,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.985,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "5x7": {
-            "Baseline": 0.98,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.989,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x7": {
-            "Baseline": 1.01,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.999,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "1x1 (MLC)": {
-            "Baseline": 0.85,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.730,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "2x2 (MLC)": {
-            "Baseline": 0.90,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.884,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "3x3 (MLC)": {
-            "Baseline": 0.92,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 0.925,
+            "Caution": 2.0,
+            "Fail": 3.0
           }
         },
         "10MV": {
           "3x3": {
-            "Baseline": 0.95,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.957,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "7x7": {
-            "Baseline": 0.97,
-            "Caution": 0.02,
-            "Fail": 0.05
-          },
-          "10x10": {
-            "Baseline": 1.0,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.981,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "20x20": {
-            "Baseline": 1.02,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 11.034,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x40": {
-            "Baseline": 1.05,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 11.058,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "3x5": {
-            "Baseline": 0.96,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.985,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "5x7": {
-            "Baseline": 0.98,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.989,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x7": {
-            "Baseline": 1.01,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.999,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "1x1 (MLC)": {
-            "Baseline": 0.85,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.730,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "2x2 (MLC)": {
-            "Baseline": 0.90,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.884,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "3x3 (MLC)": {
-            "Baseline": 0.92,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 10.925,
+            "Caution": 2.0,
+            "Fail": 3.0
           }
         },
         "6FFF": {
           "3x3": {
-            "Baseline": 0.95,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.957,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "7x7": {
-            "Baseline": 0.97,
-            "Caution": 0.02,
-            "Fail": 0.05
-          },
-          "10x10": {
-            "Baseline": 1.0,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.981,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "20x20": {
-            "Baseline": 1.02,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 21.034,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x40": {
-            "Baseline": 1.05,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 21.058,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "3x5": {
-            "Baseline": 0.96,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.985,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "5x7": {
-            "Baseline": 0.98,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.989,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "40x7": {
-            "Baseline": 1.01,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.999,
+            "Caution": 1.0,
+            "Fail": 2.0
           },
           "1x1 (MLC)": {
-            "Baseline": 0.85,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.730,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "2x2 (MLC)": {
-            "Baseline": 0.90,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.884,
+            "Caution": 2.0,
+            "Fail": 3.0
           },
           "3x3 (MLC)": {
-            "Baseline": 0.92,
-            "Caution": 0.02,
-            "Fail": 0.05
+            "Baseline": 20.925,
+            "Caution": 2.0,
+            "Fail": 3.0
           }
         }
       }
     },
     {
       "Name": "EDWOutputFactor",
-      "FieldSizeThresholds": {
-        "15": {
-          "Baseline": 1.0,
-          "Caution": 2.0,
-          "Fail": 3.0
+      "Energy": {
+        "6MV": {
+          "Angle": {
+            "15": {
+              "Baseline": 1.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "30": {
+              "Baseline": 2.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "45": {
+              "Baseline": 3.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "60": {
+              "Baseline": 4.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            }
+          }
         },
-        "30": {
-          "Baseline": 1.0,
-          "Caution": 2.0,
-          "Fail": 3.0
-        },
-        "45": {
-          "Baseline": 1.0,
-          "Caution": 2.0,
-          "Fail": 3.0
-        },
-        "60": {
-          "Baseline": 1.0,
-          "Caution": 2.0,
-          "Fail": 3.0
+        "10MV": {
+          "Angle": {
+            "15": {
+              "Baseline": 5.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "30": {
+              "Baseline": 6.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "45": {
+              "Baseline": 7.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            },
+            "60": {
+              "Baseline": 8.000,
+              "Caution": 2.0,
+              "Fail": 3.0
+            }
+          }
         }
-      }
-    },
-    {
-      "Name": "TPR2010",
-      "FieldSizeThresholds": {
-        "6MV": { "Baseline": 0.65, "Caution": 0.02, "Fail": 0.05 },
-        "10MV": { "Baseline": 0.67, "Caution": 0.02, "Fail": 0.05 },
-        "6FFF": { "Baseline": 0.66, "Caution": 0.02, "Fail": 0.05 }
       }
     }
   ]

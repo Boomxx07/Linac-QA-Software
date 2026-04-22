@@ -1,194 +1,98 @@
-﻿// Purpose: ViewModel for a single row in the linearity data table.
-//
-// Each row represents one MU setting (e.g. 5 MU, 10 MU, 200 MU).
-/// The user enters up to three electrometer readings; this class computes
-// the average, leakage-corrected value, reading-per-MU, and pass/fail status.
-
-using System;
+﻿using System;
 using System.Linq;
 using Linac_QA_Software.Helpers;
 using Linac_QA_Software.Models;
 
 namespace Linac_QA_Software.ViewModels
 {
-    public class LinearityRowViewModel : ValidatedObservableObject
+    public class LinearityRowViewModel : BaseReadingRowViewModel
     {
-        // -------------------------------------------------------------------------
-        // Event — raised whenever any calculated value changes so that the parent
-        // EnergyConfigViewModel knows to refresh the chart and regression.
-        // -------------------------------------------------------------------------
+        private float _leakageRate;
+        private float? _referenceReadingPerMu;
+
         public event EventHandler RowUpdated;
 
-        // -------------------------------------------------------------------------
-        // Identity
-        // -------------------------------------------------------------------------
-
-        /// <summary>The energyName corresponding to this section.</summary>
         public string EnergyName { get; }
-        /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
         public float MU { get; }
-        /// <summary>Whether this row is the 10x10 Jaw-defined reference field.</summary>
-        public bool IsReference => MU == 200;
+        public bool IsReference => Math.Abs(MU - 200) < 0.1;
 
-        // -------------------------------------------------------------------------
-        // Configuration (loaded from config.json)
-        // -------------------------------------------------------------------------
-        private static Config _config;
-        private static TestConfig _linearityConfig;
-
-        static LinearityRowViewModel()
-        {
-            _config = ConfigLoader.Load("config.json");
-            _linearityConfig = _config.Tests.FirstOrDefault(t => t.Name == "Linearity");
-        }
-        
-        // -------------------------------------------------------------------------
-        // User-entered readings (stored as strings to preserve input format, including trailing zeros)
-        // -------------------------------------------------------------------------
-
-        private string _reading1 = "", _reading2 = "", _reading3 = "";
-
-        public string Reading1
-        {
-            get => _reading1;
-            set
-            {
-                if (SetProperty(ref _reading1, value))
-                {
-                    ValidateNumeric(value, nameof(Reading1));
-                    Recalculate();
-                }
-            }
-        }
-
-        public string Reading2
-        {
-            get => _reading2;
-            set
-            {
-                if (SetProperty(ref _reading2, value))
-                {
-                    ValidateNumeric(value, nameof(Reading2));
-                    Recalculate();
-                }
-            }
-        }
-
-        public string Reading3
-        {
-            get => _reading3;
-            set
-            {
-                if (SetProperty(ref _reading3, value))
-                {
-                    ValidateNumeric(value, nameof(Reading3));
-                    Recalculate();
-                }
-            }
-        }
-
-        // -------------------------------------------------------------------------
-        // Calculated outputs (all read-only from the UI's perspective)
-        // -------------------------------------------------------------------------
-
-        private float? _average, _leakageCorrected, _readingPerMu, _percentDiff;
-
-        /// <summary>Mean of whichever readings have been entered.</summary>
-        public float? Average { get => _average; private set => SetProperty(ref _average, value); }
-
-        /// <summary>Average reading minus the expected leakage during the delivery time.</summary>
-        public float? LeakageCorrected { get => _leakageCorrected; private set => SetProperty(ref _leakageCorrected, value); }
-
-        /// <summary>LeakageCorrected divided by MU — the normalised output used for linearity comparison.</summary>
-        public float? ReadingPerMU { get => _readingPerMu; private set => SetProperty(ref _readingPerMu, value); }
-
-        /// <summary>
-        /// Percent difference of ReadingPerMU relative to the 200 MU reference row.
-        /// Positive = higher output than reference; negative = lower.
-        /// </summary>
+        private float? _percentDiff;
         public float? PercentDiff
         {
             get => _percentDiff;
-            private set
-            {
-                if (SetProperty(ref _percentDiff, value))
-                    OnPropertyChanged(nameof(StatusText)); // StatusText depends on PercentDiff
-            }
+            private set => SetProperty(ref _percentDiff, value);
         }
 
-        /// <summary>
-        /// Pass/fail string derived from PercentDiff.
-        /// Uses StatusEvaluator with values loaded from config.json.
-        /// </summary>
-        public string StatusText => PercentDiff.HasValue && _linearityConfig != null
-            ? StatusEvaluator.EvaluateRelative(PercentDiff.Value, _linearityConfig.Baseline, failDiff: _linearityConfig.Fail, cautionaryDiff: _linearityConfig.Caution).ToString()
-            : "";
-
-        // -------------------------------------------------------------------------
-        // Internal state
-        // -------------------------------------------------------------------------
-
-        /// <summary>
-        /// The leakage rate in nC/s, supplied by the parent EnergyConfigViewModel.
-        /// Stored separately so that recalculation works even when the user hasn't
-        /// entered all readings yet.
-        /// </summary>
-        private float _leakageRate = 0f;
-
-        // -------------------------------------------------------------------------
-        // Constructor
-        // -------------------------------------------------------------------------
-
-        public LinearityRowViewModel(int mu, string energyName)
+        // Renamed from StatusText to StatusDisplay to fix the "Type vs Variable" error
+        private string _statusDisplay;
+        public string StatusDisplay
         {
-            MU = mu;
+            get => _statusDisplay;
+            private set => SetProperty(ref _statusDisplay, value);
+        }
+
+        public LinearityRowViewModel(string energyName, float mu)
+        {
             EnergyName = energyName;
+            MU = mu;
         }
 
-        // -------------------------------------------------------------------------
-        // Methods called by the parent ViewModel
-        // -------------------------------------------------------------------------
-
-        /// <summary>
-        /// Called by EnergyConfigViewModel whenever the leakage rate changes.
-        /// Triggers a recalculation so leakage correction stays current.
-        /// </summary>
-        public void UpdateLeakageRate(float leakageRateNcPerSec)
+        public void UpdateLeakage(float newRate)
         {
-            _leakageRate = leakageRateNcPerSec;
+            _leakageRate = newRate;
             Recalculate();
         }
 
-        /// <summary>
-        /// Called by EnergyConfigViewModel to set this row's percent difference
-        /// relative to the 200 MU reference row.
-        /// </summary>
         public void UpdatePercentDiff(float referenceReadingPerMu)
         {
-            if (ReadingPerMU.HasValue && Math.Abs(referenceReadingPerMu) > 1e-10)
-                PercentDiff = ((ReadingPerMU.Value - referenceReadingPerMu) / referenceReadingPerMu) * 100f;
+            _referenceReadingPerMu = referenceReadingPerMu;
+            if (ReadingPerMU.HasValue && !IsReference)
+            {
+                PercentDiff = (float)((ReadingPerMU.Value - _referenceReadingPerMu.Value) / _referenceReadingPerMu.Value * 100.0);
+            }
             else
-                PercentDiff = null;
+            {
+                PercentDiff = IsReference ? 0 : null;
+            }
+            EvaluateStatus();
         }
 
-        // -------------------------------------------------------------------------
-        // Private recalculation logic
-        // -------------------------------------------------------------------------
-
         /// <summary>
-        /// Safely converts a string to float?, returning null if empty or invalid.
+        /// Fixed: Implements the abstract member from BaseReadingRowViewModel
+        /// and uses StatusDisplay to avoid naming conflicts.
         /// </summary>
-        private static float? ParseNumeric(string value)
+        public override void EvaluateStatus()
         {
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
+            if (IsReference)
+            {
+                StatusDisplay = "Ref";
+                return;
+            }
 
-            return float.TryParse(value, out float result) ? result : null;
+            if (!PercentDiff.HasValue)
+            {
+                StatusDisplay = "";
+                return;
+            }
+
+            // Using clinical tolerances (1% Caution, 2% Fail)
+            float absDiff = Math.Abs(PercentDiff.Value);
+            if (absDiff > 2.0f)
+            {
+                StatusDisplay = "FAIL";
+            }
+            else if (absDiff > 1.0f)
+            {
+                StatusDisplay = "CAUTION";
+            }
+            else
+            {
+                StatusDisplay = "OK";
+            }
         }
 
         private void Recalculate()
         {
-            // Parse string readings to nullable floats
             var reading1 = ParseNumeric(Reading1);
             var reading2 = ParseNumeric(Reading2);
             var reading3 = ParseNumeric(Reading3);
@@ -202,22 +106,32 @@ namespace Linac_QA_Software.ViewModels
             {
                 Average = presentReadings.Average();
 
-                //Debugging code to check what doserate MU is being collected
-                //System.Diagnostics.Debug.WriteLine(EnergyName);
-                //System.Diagnostics.Debug.WriteLine(PhysicsCalculator.DoseRateMuPerSec(EnergyName));
+                // Estimated beam-on time: MU / (MU/sec)
+                float doseRate = PhysicsCalculator.DoseRateMuPerSec(EnergyName);
+                float deliveryTimeSec = MU / doseRate;
 
-                // Estimated beam-on time in seconds based on the assumed dose rate.
-                float deliveryTimeSec = (MU / PhysicsCalculator.DoseRateMuPerSec(EnergyName));
                 LeakageCorrected = Average + (_leakageRate * deliveryTimeSec);
                 ReadingPerMU = LeakageCorrected / MU;
+
+                // If we already have a reference baseline, update the diff and status
+                if (_referenceReadingPerMu.HasValue)
+                {
+                    UpdatePercentDiff(_referenceReadingPerMu.Value);
+                }
             }
             else
             {
-                // No readings yet — reset all derived values.
-                Average = LeakageCorrected = ReadingPerMU = null;
+                Average = LeakageCorrected = ReadingPerMU = PercentDiff = null;
+                StatusDisplay = "";
             }
 
             RowUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        private float? ParseNumeric(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+            return float.TryParse(value, out float result) ? result : null;
         }
     }
 }
