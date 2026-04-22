@@ -36,9 +36,6 @@
     },
     {
       "Name": "OutputFactor",
-      "Baseline": 1,
-      "Caution": 0.02,
-      "Fail": 0.05,
       "FieldSizeThresholds": {
         "3x3": { "Baseline": 0.95, "Caution": 0.02, "Fail": 0.05 },
         "7x7": { "Baseline": 0.97, "Caution": 0.02, "Fail": 0.05 },

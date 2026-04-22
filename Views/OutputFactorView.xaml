@@ -60,14 +60,14 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <StackPanel Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel Grid.ColumnSpan="3" Grid.Row="0" Margin="0,0,0,10">
                                 <TextBlock Text="{Binding MeasurementInstruction}"/>
                             </StackPanel>
 
@@ -87,14 +87,16 @@
                                             <ColumnDefinition Width="80"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Grid.ColumnSpan="5" BorderBrush="Black" BorderThickness="1"/>
+                                        <Border Grid.ColumnSpan="6" BorderBrush="Black" BorderThickness="1"/>
 
                                         <TextBlock Grid.Column="0" Text="Field Size (X×Y)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="1" Text="Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="2" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="3" Text="Output Factor" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="4" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="4" Text="% Diff from Baseline" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="5" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
 
                                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Rows}">
@@ -109,8 +111,9 @@
                                                         <ColumnDefinition Width="80"/>
                                                         <ColumnDefinition Width="90"/>
                                                         <ColumnDefinition Width="90"/>
+                                                        <ColumnDefinition Width="90"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Border Grid.ColumnSpan="7" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                                                    <Border Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1,0,1,1"/>
 
                                                     <TextBlock Grid.Column="0" Text="{Binding FieldLabel}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                                     <TextBox Grid.Column="1" Text="{Binding Reading1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
@@ -119,8 +122,9 @@
 
                                                     <TextBox Grid.Column="4" Text="{Binding Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
                                                     <TextBox Grid.Column="5" Text="{Binding OutputFactor, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
+                                                    <TextBox Grid.Column="6" Text="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
 
-                                                    <TextBox Grid.Column="6"
+                                                    <TextBox Grid.Column="7"
                                                              Text="{Binding StatusText, Mode=OneWay}">
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
@@ -147,11 +151,11 @@
 
                             <!-- Charts Section -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0">
-                                <oxy:PlotView Model="{Binding SymmetricFieldsPlotModel}" Height="350" Margin="0,0,0,10"/>
+                                <oxy:PlotView Model="{Binding SymmetricFieldsPlotModel}" Height="350" Margin="0,0,0,10" helpers:ResponsiveVisibility.MinWidth="1400"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="10,0,0,0">
-                                <oxy:PlotView Model="{Binding AsymmetricFieldsPlotModel}" Height="350"/>
+                            <StackPanel Grid.Column="2" Grid.Row="1" Margin="10,0,0,0">
+                                <oxy:PlotView Model="{Binding AsymmetricFieldsPlotModel}" Height="350" Margin="0,0,0,10" helpers:ResponsiveVisibility.MinWidth="1400"/>
                             </StackPanel>
 
                         </Grid>

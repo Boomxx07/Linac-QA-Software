@@ -222,7 +222,7 @@ namespace Linac_QA_Software.ViewModels
 
             PlotModel = new PlotModel
             {
-                //Title = EnergyName
+                Title = $"{EnergyName} Linearity"
             };
 
             PlotModel.Axes.Add(new LinearAxis

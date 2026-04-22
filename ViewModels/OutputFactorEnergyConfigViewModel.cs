@@ -98,7 +98,7 @@ namespace Linac_QA_Software.ViewModels
                 Rows.Add(row);
             }
 
-            InitialisePlots();
+            InitialisePlots(energyName);
         }
 
         // -------------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace Linac_QA_Software.ViewModels
         /// <summary>
         /// Sets up the two OxyPlot charts
         /// </summary>
-        private void InitialisePlots()
+        private void InitialisePlots(string energyName)
         {
             // ===== Chart 1: Symmetric Fields =====
             _jawDefinedSeries = new LineSeries
@@ -129,7 +129,7 @@ namespace Linac_QA_Software.ViewModels
 
             SymmetricFieldsPlotModel = new PlotModel
             {
-                Title = "Output Factors - Symmetric Fields"
+                Title = $"{energyName} OFs - Symmetric"
             };
 
             SymmetricFieldsPlotModel.Axes.Add(new LinearAxis
@@ -163,7 +163,7 @@ namespace Linac_QA_Software.ViewModels
 
             AsymmetricFieldsPlotModel = new PlotModel
             {
-                Title = "Output Factors - Asymmetric Fields"
+                Title = $"{energyName} OFs - Asymmetric"
             };
 
             // For BarSeries, CategoryAxis must be on the Y-axis (left/vertical)

@@ -8,11 +8,11 @@
         xmlns:viewmodels="clr-namespace:Linac_QA_Software.ViewModels"
         mc:Ignorable="d"
         Title="SCGH Linac QA" Height="900" Width="1000"
-        MinWidth="810"
-        MinHeight="300"
+        MinWidth="890"
+        MinHeight="310"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel, IsDesignTimeCreatable=True}">
 
-    <DockPanel Margin="15">
+    <DockPanel Margin="15" MaxWidth="1500">
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Content="Save Draft" Width="120" Height="30" Margin="5" Command="{Binding SaveCommand}"/>
             <Button Content="Final Submit" Width="120" Height="30" Margin="5" Command="{Binding SubmitCommand}" Background="AliceBlue"/>
