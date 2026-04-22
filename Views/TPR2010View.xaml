@@ -51,7 +51,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
-            <TextBlock Text="TPR(10)20 Measurements (All Energies)" 
+            <TextBlock Text="TPR20,10 Measurements (All Energies)" 
                        FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="Measurement Instruction: SSD values are 80cm and 90cm; Depths are 20cm and 10cm respectively" 
                        Margin="0,0,0,10" TextWrapping="Wrap"/>
@@ -90,7 +90,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="4" Text="Reading 2" Style="{StaticResource HeaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="0" Grid.Column="5" Text="Reading 3" Style="{StaticResource HeaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="0" Grid.Column="6" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
-                <TextBlock Grid.Row="0" Grid.Column="7" Text="TPR(10)20" Style="{StaticResource HeaderTextBlockStyle}"/>
+                <TextBlock Grid.Row="0" Grid.Column="7" Text="TPR20,10" Style="{StaticResource HeaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="0" Grid.Column="8" Text="% Diff from Baseline" Style="{StaticResource HeaderTextBlockStyle}"/>
                 <TextBlock Grid.Row="0" Grid.Column="9" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
 
@@ -103,9 +103,9 @@
                 <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding EnergyRows[0].Row80_20.Reading2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding EnergyRows[0].Row80_20.Reading3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="1" Grid.Column="6" Text="{Binding EnergyRows[0].Row80_20.Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[0].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30" Margin="1,0,1,0"/>
-                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[0].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30"/>
-                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[0].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="30">
+                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[0].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35" Margin="1,0,1,0"/>
+                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[0].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35"/>
+                <TextBox Grid.Row="1" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[0].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="35">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
                             <Style.Triggers>
@@ -141,9 +141,9 @@
                 <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding EnergyRows[1].Row80_20.Reading2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding EnergyRows[1].Row80_20.Reading3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="3" Grid.Column="6" Text="{Binding EnergyRows[1].Row80_20.Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[1].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30"/>
-                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[1].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30"/>
-                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[1].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="30">
+                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[1].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35"/>
+                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[1].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35"/>
+                <TextBox Grid.Row="3" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[1].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="35">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
                             <Style.Triggers>
@@ -179,9 +179,9 @@
                 <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding EnergyRows[2].Row80_20.Reading2, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="5" Grid.Column="5" Text="{Binding EnergyRows[2].Row80_20.Reading3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                 <TextBox Grid.Row="5" Grid.Column="6" Text="{Binding EnergyRows[2].Row80_20.Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[2].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30"/>
-                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[2].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="30"/>
-                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[2].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="30">
+                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="7" Text="{Binding EnergyRows[2].TPR2010Value, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35"/>
+                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="8" Text="{Binding EnergyRows[2].PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}" VerticalAlignment="Center" Height="35"/>
+                <TextBox Grid.Row="5" Grid.RowSpan="2" Grid.Column="9" Text="{Binding EnergyRows[2].StatusText, Mode=OneWay}" VerticalAlignment="Center" Height="35">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
                             <Style.Triggers>

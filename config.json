@@ -37,17 +37,93 @@
     {
       "Name": "OutputFactor",
       "FieldSizeThresholds": {
-        "3x3": { "Baseline": 0.95, "Caution": 0.02, "Fail": 0.05 },
-        "7x7": { "Baseline": 0.97, "Caution": 0.02, "Fail": 0.05 },
-        "10x10": { "Baseline": 1.0, "Caution": 0.02, "Fail": 0.05 },
-        "20x20": { "Baseline": 1.02, "Caution": 0.02, "Fail": 0.05 },
-        "40x40": { "Baseline": 1.05, "Caution": 0.02, "Fail": 0.05 },
-        "3x5": { "Baseline": 0.96, "Caution": 0.02, "Fail": 0.05 },
-        "5x7": { "Baseline": 0.98, "Caution": 0.02, "Fail": 0.05 },
-        "40x7": { "Baseline": 1.01, "Caution": 0.02, "Fail": 0.05 },
-        "1x1 (MLC)": { "Baseline": 0.85, "Caution": 0.02, "Fail": 0.05 },
-        "2x2 (MLC)": { "Baseline": 0.90, "Caution": 0.02, "Fail": 0.05 },
-        "3x3 (MLC)": { "Baseline": 0.92, "Caution": 0.02, "Fail": 0.05 }
+        "3x3": {
+          "Baseline": 0.95,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "7x7": {
+          "Baseline": 0.97,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "10x10": {
+          "Baseline": 1.0,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "20x20": {
+          "Baseline": 1.02,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "40x40": {
+          "Baseline": 1.05,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "3x5": {
+          "Baseline": 0.96,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "5x7": {
+          "Baseline": 0.98,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "40x7": {
+          "Baseline": 1.01,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "1x1 (MLC)": {
+          "Baseline": 0.85,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "2x2 (MLC)": {
+          "Baseline": 0.90,
+          "Caution": 0.02,
+          "Fail": 0.05
+        },
+        "3x3 (MLC)": {
+          "Baseline": 0.92,
+          "Caution": 0.02,
+          "Fail": 0.05
+        }
+      }
+    },
+    {
+      "Name": "EDWOutputFactor",
+      "Caution": 2.0,
+      "Fail": 3.0,
+      "FieldSizeThresholds": {
+        "10x10 Open": {
+          "Baseline": 1.0,
+          "Caution": 2.0,
+          "Fail": 3.0
+        },
+        "15": {
+          "Baseline": 1.0,
+          "Caution": 2.0,
+          "Fail": 3.0
+        },
+        "30": {
+          "Baseline": 1.0,
+          "Caution": 2.0,
+          "Fail": 3.0
+        },
+        "45": {
+          "Baseline": 1.0,
+          "Caution": 2.0,
+          "Fail": 3.0
+        },
+        "60": {
+          "Baseline": 1.0,
+          "Caution": 2.0,
+          "Fail": 3.0
+        }
       }
     },
     {

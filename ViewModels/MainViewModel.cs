@@ -26,6 +26,7 @@ namespace Linac_QA_Software.ViewModels
 
         /// <summary>ViewModel for the Output Factor QA tab.</summary>
         public OutputFactorViewModel OutputFactorVM { get; }
+        public EDWOutputFactorViewModel EDWOutputFactorVM { get; }
 
         /// <summary>ViewModel for the TPR2010 QA tab.</summary>
         public TPR2010ViewModel TPR2010VM { get; }
@@ -82,6 +83,7 @@ namespace Linac_QA_Software.ViewModels
 
             LinearityVM = new LinearityViewModel();
             OutputFactorVM = new OutputFactorViewModel();
+            EDWOutputFactorVM = new EDWOutputFactorViewModel();
             TPR2010VM = new TPR2010ViewModel();
             SaveCommand = new RelayCommand(Save);
             SubmitCommand = new RelayCommand(Submit);

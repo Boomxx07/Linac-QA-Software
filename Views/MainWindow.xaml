@@ -63,7 +63,11 @@
                 <views:OutputFactorView DataContext="{Binding OutputFactorVM}" />
 
                 <Separator Margin="0,10"/>
-                <TextBlock Text="TPR(10)20" FontSize="20" FontWeight="Bold" Margin="0,10"/>
+                <TextBlock Text="EDW Output Factors" FontSize="20" FontWeight="Bold" Margin="0,10"/>
+                <views:EDWOutputFactorView DataContext="{Binding EDWOutputFactorVM}" />
+
+                <Separator Margin="0,10"/>
+                <TextBlock Text="TPR20,10" FontSize="20" FontWeight="Bold" Margin="0,10"/>
                 <views:TPR2010View DataContext="{Binding TPR2010VM}" />
 
             </StackPanel>
