@@ -88,15 +88,17 @@
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="90"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Grid.ColumnSpan="6" BorderBrush="Black" BorderThickness="1"/>
+                                        <Border Grid.ColumnSpan="7" BorderBrush="Black" BorderThickness="1"/>
 
                                         <TextBlock Grid.Column="0" Text="Field Size (X×Y)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="1" Text="Readings (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="2" Text="Average (nC)" Style="{StaticResource HeaderTextBlockStyle}"/>
                                         <TextBlock Grid.Column="3" Text="Output Factor" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="4" Text="% Diff from Baseline" Style="{StaticResource HeaderTextBlockStyle}"/>
-                                        <TextBlock Grid.Column="5" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="4" Text="Baseline" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="5" Text="% Diff from Baseline" Style="{StaticResource HeaderTextBlockStyle}"/>
+                                        <TextBlock Grid.Column="6" Text="Result" Style="{StaticResource HeaderTextBlockStyle}"/>
                                     </Grid>
 
                                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Rows}">
@@ -112,8 +114,9 @@
                                                         <ColumnDefinition Width="90"/>
                                                         <ColumnDefinition Width="90"/>
                                                         <ColumnDefinition Width="90"/>
+                                                        <ColumnDefinition Width="90"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Border Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                                                    <Border Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="1,0,1,1"/>
 
                                                     <TextBlock Grid.Column="0" Text="{Binding FieldLabel}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                                     <TextBox Grid.Column="1" Text="{Binding Reading1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
@@ -140,7 +143,7 @@
                                                     <TextBox Grid.Column="6">
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
-                                                                <Setter Property="Text" Value="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}"/>
+                                                                <Setter Property="Text" Value="{Binding Baseline, StringFormat={}{0:F4}, Mode=OneWay}"/>
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsReference}" Value="True">
                                                                         <Setter Property="Text" Value="N/A"/>
@@ -153,6 +156,21 @@
                                                     </TextBox>
 
                                                     <TextBox Grid.Column="7">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
+                                                                <Setter Property="Text" Value="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsReference}" Value="True">
+                                                                        <Setter Property="Text" Value="N/A"/>
+                                                                        <Setter Property="Background" Value="White"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+
+                                                    <TextBox Grid.Column="8">
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
                                                                 <Setter Property="Text" Value="{Binding StatusText, Mode=OneWay}"/>

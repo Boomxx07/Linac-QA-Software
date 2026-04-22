@@ -33,7 +33,7 @@ namespace Linac_QA_Software.ViewModels
         public bool IsMLC { get; }
 
         /// <summary>Display label for this row (e.g. "10×10", "3×5 (MLC)").</summary>
-        public string FieldLabel => IsMLC ? $"{X:F0}×{Y:F0} (MLC)" : $"{X:F0}×{Y:F0}";
+        public string FieldLabel => IsMLC ? $"{X:F0}x{Y:F0} (MLC)" : $"{X:F0}x{Y:F0}";
 
         /// <summary>Whether this is a symmetric field (X == Y).</summary>
         public bool IsSymmetric => Math.Abs(X - Y) < 0.01f;
@@ -130,24 +130,24 @@ namespace Linac_QA_Software.ViewModels
         {
             get
             {
-                if (!OutputFactor.HasValue || _outputFactorConfig == null)
+                if (!OutputFactor.HasValue || _outputFactorConfig?.EnergyThresholds == null)
                     return "";
 
-                // Try to get field-size-specific thresholds using the FieldLabel as key
-                // This matches the config.json format (e.g. "3x3", "3x3 (MLC)", "3x5", etc.)
-                float baseline = _outputFactorConfig.Baseline;
-                float caution = _outputFactorConfig.Caution;
-                float fail = _outputFactorConfig.Fail;
+                // 1. Get the dictionary for the specific energy (6MV, 10MV, etc.)
+                if (!_outputFactorConfig.EnergyThresholds.TryGetValue(EnergyName, out var energyDict))
+                    return "Energy Missing";
 
-                if (_outputFactorConfig.FieldSizeThresholds != null &&
-                    _outputFactorConfig.FieldSizeThresholds.TryGetValue(FieldLabel, out var fieldThreshold))
-                {
-                    baseline = fieldThreshold.Baseline;
-                    caution = fieldThreshold.Caution;
-                    fail = fieldThreshold.Fail;
-                }
+                // 2. Get the threshold for the specific field size using the 'x' key
+                if (!energyDict.TryGetValue(FieldLabel, out var threshold))
+                    return "Ref Missing";
 
-                return StatusEvaluator.EvaluateRelative(OutputFactor.Value, baseline, failDiff: fail, cautionaryDiff: caution).ToString();
+                return StatusEvaluator
+                    .EvaluateRelative(
+                        value: OutputFactor.Value,
+                        baseline: threshold.Baseline,
+                        failDiff: threshold.Fail,
+                        cautionaryDiff: threshold.Caution)
+                    .ToString();
             }
         }
 

@@ -14,16 +14,19 @@ namespace Linac_QA_Software.Models
     public class TestConfig
     {
         public string? Name { get; set; }
+
+        // Level 1: Global Defaults (Works for Linearity)
         public float Baseline { get; set; }
         public float Caution { get; set; }
         public float Fail { get; set; }
 
-        /// <summary>
-        /// Optional field-size-specific thresholds for tests like OutputFactor.
-        /// Key format: "3x3", "10x10", "3x5", etc.
-        /// If a field size is not found, falls back to the default Baseline/Caution/Fail.
-        /// </summary>
+        // Level 2: Field-specific but energy-independent
         public Dictionary<string, FieldSizeThreshold> FieldSizeThresholds { get; set; }
+            = new(StringComparer.OrdinalIgnoreCase);
+
+        // Level 3: Energy-specific nested thresholds
+        public Dictionary<string, Dictionary<string, FieldSizeThreshold>> EnergyThresholds { get; set; }
+            = new(StringComparer.OrdinalIgnoreCase);
     }
 
     public class FieldSizeThreshold
