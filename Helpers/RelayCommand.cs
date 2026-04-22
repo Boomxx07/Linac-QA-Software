@@ -28,13 +28,13 @@ namespace Linac_QA_Software.Helpers
         /// Wired to WPF's CommandManager so the button enabled-state is
         /// re-evaluated automatically whenever UI interaction occurs.
         /// </summary>
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute();
-        public void Execute(object parameter) => _execute();
+        public bool CanExecute(object? parameter) => _canExecute == null || _canExecute();
+        public void Execute(object? parameter) => _execute();
     }
 }

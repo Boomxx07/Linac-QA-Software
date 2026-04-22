@@ -27,6 +27,8 @@ namespace Linac_QA_Software.ViewModels
         public string EnergyName { get; }
         /// <summary>The monitor-unit setting this row represents (e.g. 5, 10, 200).</summary>
         public float MU { get; }
+        /// <summary>Whether this row is the 10x10 Jaw-defined reference field.</summary>
+        public bool IsReference => MU == 200;
 
         // -------------------------------------------------------------------------
         // Configuration (loaded from config.json)

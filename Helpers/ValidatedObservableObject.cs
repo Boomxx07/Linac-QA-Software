@@ -41,7 +41,7 @@ namespace Linac_QA_Software.Helpers
         /// Raised whenever the error state changes for any property.
         /// WPF uses this to trigger validation visual feedback (red borders, etc).
         /// </summary>
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         /// <summary>
         /// Returns true if any property currently has validation errors.
@@ -52,7 +52,7 @@ namespace Linac_QA_Software.Helpers
         /// Gets all validation error messages for a specific property.
         /// If the property has no errors, returns an empty enumerable.
         /// </summary>
-        public IEnumerable GetErrors(string propertyName)
+        public IEnumerable GetErrors(string? propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
                 return Enumerable.Empty<string>();
@@ -63,7 +63,7 @@ namespace Linac_QA_Software.Helpers
         /// <summary>
         /// Adds a validation error to the specified property.
         /// </summary>
-        protected void AddError(string errorMessage, [CallerMemberName] string propertyName = null)
+        protected void AddError(string errorMessage, [CallerMemberName] string? propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
                 return;
@@ -81,7 +81,7 @@ namespace Linac_QA_Software.Helpers
         /// <summary>
         /// Clears all validation errors for the specified property.
         /// </summary>
-        protected void ClearErrors([CallerMemberName] string propertyName = null)
+        protected void ClearErrors([CallerMemberName] string? propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
                 return;
@@ -106,7 +106,7 @@ namespace Linac_QA_Software.Helpers
         /// Helper method to validate that a string represents a valid decimal number.
         /// Clears errors if valid, adds error if not.
         /// </summary>
-        protected bool ValidateNumeric(string value, [CallerMemberName] string propertyName = null)
+        protected bool ValidateNumeric(string value, [CallerMemberName] string? propertyName = null)
         {
             // Empty or null is valid (field is optional)
             if (string.IsNullOrWhiteSpace(value))

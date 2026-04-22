@@ -41,6 +41,9 @@ namespace Linac_QA_Software.ViewModels
         /// <summary>Square field size for symmetric fields, or average for asymmetric.</summary>
         public float SquareFieldSize => (X + Y) / 2f;
 
+        /// <summary>Whether this row is the 10x10 Jaw-defined reference field.</summary>
+        public bool IsReference => Math.Abs(X - 10) < 0.01f && Math.Abs(Y - 10) < 0.01f && !IsMLC;
+
         // -------------------------------------------------------------------------
         // Configuration (loaded from config.json)
         // -------------------------------------------------------------------------

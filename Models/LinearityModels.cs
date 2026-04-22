@@ -92,7 +92,7 @@ namespace Linac_QA_Software.Models
         /// ordinary least squares regression.  Returns null if fewer than two
         /// points are given or if the calculation is geometrically degenerate.
         /// </summary>
-        public static RegressionResult CalculateRegression(IList<LinearityPoint> points)
+        public static RegressionResult? CalculateRegression(IList<LinearityPoint> points)
         {
             if (points == null || points.Count < 2) return null;
 

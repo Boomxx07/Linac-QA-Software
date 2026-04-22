@@ -96,14 +96,7 @@
     },
     {
       "Name": "EDWOutputFactor",
-      "Caution": 2.0,
-      "Fail": 3.0,
       "FieldSizeThresholds": {
-        "10x10 Open": {
-          "Baseline": 1.0,
-          "Caution": 2.0,
-          "Fail": 3.0
-        },
         "15": {
           "Baseline": 1.0,
           "Caution": 2.0,
@@ -128,9 +121,6 @@
     },
     {
       "Name": "TPR2010",
-      "Baseline": 0.65,
-      "Caution": 0.02,
-      "Fail": 0.05,
       "FieldSizeThresholds": {
         "6MV": { "Baseline": 0.65, "Caution": 0.02, "Fail": 0.05 },
         "10MV": { "Baseline": 0.67, "Caution": 0.02, "Fail": 0.05 },

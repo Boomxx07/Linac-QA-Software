@@ -14,7 +14,7 @@ namespace Linac_QA_Software.Models
     /// </summary>
     public class TPR2010Measurement
     {
-        public string EnergyName { get; set; }
+        public string? EnergyName { get; set; }
         public float SSD { get; set; }  // 80 or 90 cm
         public float Depth { get; set; }  // 10 or 20 cm
         public float? Average { get; set; }

@@ -20,7 +20,7 @@ namespace Linac_QA_Software.ViewModels
         // -------------------------------------------------------------------------
 
         public string EnergyName { get; }
-        public string MeasurementInstruction { get; }
+        public string? MeasurementInstruction { get; }
 
         // -------------------------------------------------------------------------
         // Table rows 

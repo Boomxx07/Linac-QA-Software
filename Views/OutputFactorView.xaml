@@ -121,23 +121,69 @@
                                                     <TextBox Grid.Column="3" Text="{Binding Reading3, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
 
                                                     <TextBox Grid.Column="4" Text="{Binding Average, StringFormat={}{0:F3}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                                                    <TextBox Grid.Column="5" Text="{Binding OutputFactor, StringFormat={}{0:F4}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
-                                                    <TextBox Grid.Column="6" Text="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}" Style="{StaticResource CalculatedTextBoxStyle}"/>
 
-                                                    <TextBox Grid.Column="7"
-                                                             Text="{Binding StatusText, Mode=OneWay}">
+                                                    <TextBox Grid.Column="5">
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
+                                                                <Setter Property="Text" Value="{Binding OutputFactor, StringFormat={}{0:F4}, Mode=OneWay}"/>
                                                                 <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding StatusText}" Value="FAIL">
+                                                                    <DataTrigger Binding="{Binding IsReference}" Value="True">
+                                                                        <Setter Property="Text" Value="N/A"/>
+                                                                        <Setter Property="Background" Value="White"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+
+                                                    <TextBox Grid.Column="6">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
+                                                                <Setter Property="Text" Value="{Binding PercentDiff, StringFormat={}{0:F2}, Mode=OneWay}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsReference}" Value="True">
+                                                                        <Setter Property="Text" Value="N/A"/>
+                                                                        <Setter Property="Background" Value="White"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                    </TextBox>
+
+                                                    <TextBox Grid.Column="7">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="TextBox" BasedOn="{StaticResource CalculatedTextBoxStyle}">
+                                                                <Setter Property="Text" Value="{Binding StatusText, Mode=OneWay}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsReference}" Value="True">
+                                                                        <Setter Property="Text" Value="N/A"/>
+                                                                        <Setter Property="Background" Value="White"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                    </DataTrigger>
+
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
+                                                                            <Condition Binding="{Binding StatusText}" Value="FAIL"/>
+                                                                        </MultiDataTrigger.Conditions>
                                                                         <Setter Property="Background" Value="Red"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding StatusText}" Value="CAUTIONARY">
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
+                                                                            <Condition Binding="{Binding StatusText}" Value="CAUTIONARY"/>
+                                                                        </MultiDataTrigger.Conditions>
                                                                         <Setter Property="Background" Value="Orange"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding StatusText}" Value="OK">
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsReference}" Value="False"/>
+                                                                            <Condition Binding="{Binding StatusText}" Value="OK"/>
+                                                                        </MultiDataTrigger.Conditions>
                                                                         <Setter Property="Background" Value="LawnGreen"/>
-                                                                    </DataTrigger>
+                                                                    </MultiDataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </TextBox.Style>

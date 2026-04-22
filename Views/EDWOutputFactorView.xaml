@@ -58,7 +58,7 @@
                         <StackPanel>
                             <TextBlock Text="{Binding MeasurementInstruction}" Margin="0,0,0,10" TextWrapping="Wrap"/>
 
-                            <Grid Background="#F9F9F9">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="80"/>
